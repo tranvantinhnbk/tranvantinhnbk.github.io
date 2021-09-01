@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/mnist/style.css">
+    <script src="./canvas.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <!-- Navigate bar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <a class="navbar-brand" href="/">
+            <img src="/image/avarta.png" width="30" height="30" class="d-inline-block align-top" alt="">
+            LvCH
+          </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+                <li class="nav-item active">
+                  <a class="nav-link" href="/Introduction">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/Introduction">Itroduction</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/Blog">Blog</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/mnist">Project</a>
+                </li>
+              </ul>
+            </div>
+        </nav>
+      <!-- Navigate bar -->
+      <h1> Dùng CNN trong MNIST DEMO </h1>
+      <div id ="aa" align="center" margin ="0" padding="0" border="0";>
+        <canvas id="canvas" width = "280" height ="280" ></canvas>
+        <a id="result" size = "280"></a>
+      </div>
+      <div align="center">
+        <button type="button" id="reset">Reset</button>
+        <button type="button" id="predict">Predict</button>
+      </div>
+      <br> <br>
+      <p>Đây là phần demo của phần mềm dự đoán số Sử dụng thư viện tf.js</p>
+      <p style="display:inline">Database được sử dụng MNIST</p> <a href="http://yann.lecun.com/exdb/mnist/">http://yann.lecun.com/exdb/mnist/</a>
+      <p>-Bước đầu hình ảnh lấy từ bảng vẽ và được tiền xử lí theo tiêu chuẩn MNIST</p>
+      <p style="display:inline">-Model được train trên</p>
+      <a href="https://github.com/tiachoptinhdu/Machine_learning/blob/main/CNN_MNIST_for_web.ipynb">COLAB</a>
+      <p>-Sau đó được load vào file javascript và đưa ra dự đoán</p>
+      <p style="display:inline"> Đây là link project:</p>
+      <a href="https://github.com/tiachoptinhdu/tiachoptinhdu.github.io/tree/main/mnist">SOURCE CODE</a>
+
+
+  </body>
+</html>
