@@ -1,6 +1,12 @@
 # General Engineering
 
-A personal blog exploring how things work across engineering and science—from mathematics, physics, and biology to computer science, open-source projects, and hands-on experiments.
+Ideas and abstractions across mathematics, physics, biology, computing, and engineering, shared by Tran Van Tinh.
+
+## Philosophy
+
+Contribute valuable ideas, deep abstractions, and knowledge across disciplines—an open resource the world can build on toward **superintelligence (SI)** and **recursive self-improvement (RSI)**.
+
+The ambition is to make this repository a trusted source of foundational knowledge, earning that trust through clear reasoning, evidence, and continuous correction.
 
 ## Topics
 
