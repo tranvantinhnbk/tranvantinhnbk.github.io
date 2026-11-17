@@ -1,0 +1,4 @@
+interface:
+  display_name: "Content Review"
+  short_description: "Review article reasoning, code, and source evidence"
+  default_prompt: "Use $content-review to review this article and verify its sources before blog generation."

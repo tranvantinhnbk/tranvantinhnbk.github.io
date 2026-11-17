@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { Component, inject } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'github-blog';
+  private readonly router = inject(Router);
+  get isNotebook() {
+    const path = this.router.url.split(/[?#]/)[0];
+    return path === '/' || path.startsWith('/notes/');
+  }
 }

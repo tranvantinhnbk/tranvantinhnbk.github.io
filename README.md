@@ -26,7 +26,7 @@ npm ci
 npm start
 ```
 
-Build: `npm run build`.
+Build: `npm run build`. See [local builds and manual GitHub Pages deployment](docs/deployment/github-pages.md).
 
 ## For contributors and agents
 

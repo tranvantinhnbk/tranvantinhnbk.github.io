@@ -1,33 +1,24 @@
 
 <nav class="mat-typography mat-app-background" class="navbar" [ngStyle]="{'position': position}">
-  <a class="avatar">
-    <img src="/assets/avatar.png" >
+  <a class="avatar" routerLink="/profile" aria-label="Profile">
+    <img src="/assets/avatar.png" alt="Tran Van Tinh">
     LvCH
   </a>
   <ul>
-    <li><a routerLink='about'>About</a></li>
-    <!-- <li>
-      <a [matMenuTriggerFor]="blogMenu">
-        Blog 
-        <img src="/assets/icon/down-arrow.svg"  width=10x>
-      </a>
-      <mat-menu #blogMenu="matMenu">
-        <button mat-menu-item routerLink="/blog/leetcode">Leetcode</button>
-        <button mat-menu-item>Mathematic</button>
-      </mat-menu>
-    </li> -->
+    <li><a routerLink="/">Blog</a></li>
+    <li><a routerLink="/profile">About / CV</a></li>
     <li>
       <a [matMenuTriggerFor]="projectMenu">
         Project
         <img src="/assets/icon/down-arrow.svg"  width=10x>
       </a>
       <mat-menu #projectMenu="matMenu">
-          <button routerLink="/projects/mnist" mat-menu-item >
+          <button routerLink="/profile/projects/mnist" mat-menu-item >
             Handwritten digit recognition
           </button>
       </mat-menu>
     </li>
-    <li><a routerLink="/certificate">Certificate</a></li>
+    <li><a routerLink="/profile/achievements">Achievements</a></li>
   </ul>
   <a class="icon">
     LOVE

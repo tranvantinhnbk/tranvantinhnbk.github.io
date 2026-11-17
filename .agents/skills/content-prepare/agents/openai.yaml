@@ -1,0 +1,4 @@
+interface:
+  display_name: "Content Prepare"
+  short_description: "Discuss ideas and draft Markdown for your review"
+  default_prompt: "Use $content-prepare to discuss this idea with me and draft it in Markdown for my review before blog generation."
