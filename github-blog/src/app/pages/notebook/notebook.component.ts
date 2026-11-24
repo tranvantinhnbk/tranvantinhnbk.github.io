@@ -16,6 +16,7 @@ export class NotebookComponent implements AfterViewInit {
   readonly subjects = ['Mathematics', 'Physics', 'Biology', 'Engineering', 'Intelligence'];
   query = '';
   menuOpen = false;
+  algebraExpanded = true;
   page = 'home';
   slug = '';
   loading = false;
@@ -72,6 +73,10 @@ export class NotebookComponent implements AfterViewInit {
     return this.notes.filter(note => `${note.title} ${note.subject} ${note.section || ''} ${note.kind}`.toLowerCase().includes(query));
   }
   bySubject(subject: string) { return this.filteredNotes.filter(note => note.subject === subject); }
+  setQuery(value: string) {
+    this.query = value;
+    if (value.trim()) this.algebraExpanded = true;
+  }
   openNote() { this.menuOpen = false; }
   skipToContent(event: Event) { event.preventDefault(); this.content?.nativeElement.focus(); }
 

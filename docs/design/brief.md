@@ -212,3 +212,13 @@ Validation: six content tests, five route regressions, and nine reader UI tests 
 Self-review using `ui-review` found no blocking departure from the accepted reader. Original legacy template/asset hashes and the manual-only deployment gates remain unchanged. Whitespace check passes. No commit, push, or deployment performed.
 
 Local review while the existing production-output server runs: `http://127.0.0.1:4302/math/abstract-algebra/subgroups`.
+
+## Abstract Algebra navigation refinement — accepted 2026-11-24
+
+The author requested a collapsible Abstract Algebra branch and a section contents page explaining each lesson with a TL;DR. This is a functional refinement within the already accepted notebook layout, not a new visual direction. Kept the existing theme, section URL, lesson URLs, and catalog metadata.
+
+The sidebar now has separate sibling controls: a 44 px arrow button toggles the lesson list with an accessible expanded state and controlled-region label; the Abstract Algebra text remains a link to `/math/abstract-algebra`. The branch starts expanded. Entering a nonempty search expands it so matching lessons remain discoverable. The section page now explicitly presents an ordered Contents list: part number, lesson title/link, learning-session type, and a labeled TL;DR drawn from each approved lesson's existing summary. All four implemented lessons appear in order; planned future topics remain separate. Article bodies remain fetched only when a lesson is opened.
+
+Validation: 11 reader UI tests and five route regressions pass under Bun. Added coverage for toggling without navigation, search revealing a collapsed matching branch, title-link navigation, all four TL;DR links, and exact 390/768/1366 px browser-frame layouts for both the contents page and lesson reader. Production build and whitespace checks pass, with existing warnings (notebook stylesheet about 5.13 KB). Independent production-browser checks at exact 390, 768, and 1366 px widths verify native Enter collapses the branch without leaving Math, then Enter on its separate title opens the section contents. Each view contains four TL;DR lesson links, has no horizontal document overflow, and records no uncaught JavaScript exception. Phone/laptop screenshots of the resulting contents page were visually inspected. Physical-device and comprehensive accessibility audits are not claimed.
+
+Self-review with `ui-review` found no blocking issue. This task changes no article source, route definitions, dependencies, security behavior, or deployment gates. Existing unrelated Bun migration changes are preserved. No commit, push, or deployment performed. Local inspection: `http://127.0.0.1:4302/math/abstract-algebra` while the production-output server is running.

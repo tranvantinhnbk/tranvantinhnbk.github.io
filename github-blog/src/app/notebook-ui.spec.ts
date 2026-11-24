@@ -25,6 +25,33 @@ describe('Implemented notebook reader and responsive navigation', () => {
     expect(hint.open).toBeTrue();
   });
 
+  it('collapses the Algebra lessons separately from opening the contents page and reveals search matches', async () => {
+    const harness = await RouterTestingHarness.create();
+    const page = await harness.navigateByUrl('/math', NotebookComponent);
+    const root = harness.routeNativeElement!;
+    const toggle = root.querySelector('.section-toggle') as HTMLButtonElement;
+    const lessons = root.querySelector('#algebra-lessons') as HTMLElement;
+    toggle.click(); harness.detectChanges();
+    expect(toggle.getAttribute('aria-expanded')).toBe('false');
+    expect(lessons.hidden).toBeTrue();
+    expect(page.page).toBe('math');
+    const search = root.querySelector('input[type=search]') as HTMLInputElement;
+    search.value = 'subgroups'; search.dispatchEvent(new Event('input')); harness.detectChanges();
+    expect(lessons.hidden).toBeFalse();
+    expect(lessons.querySelectorAll('a').length).toBe(1);
+    search.value = ''; search.dispatchEvent(new Event('input')); harness.detectChanges();
+    toggle.click(); harness.detectChanges();
+    (root.querySelector('.section-heading a') as HTMLAnchorElement).click();
+    await harness.fixture.whenStable(); harness.detectChanges();
+    const overview = harness.routeNativeElement!;
+    expect(overview.querySelector('#algebra-contents')?.textContent).toBe('Contents');
+    const entries = Array.from(overview.querySelectorAll('.course-contents a'));
+    expect(entries.length).toBe(4);
+    expect(entries.every(entry => entry.textContent!.includes('TL;DR:'))).toBeTrue();
+    expect(entries[0].textContent).toContain('closure');
+    expect(entries[3].getAttribute('href')).toBe('/math/abstract-algebra/subgroups');
+  });
+
   it('lists Parts 1 through 4 correctly and links between the real rendered lessons', async () => {
     const harness = await RouterTestingHarness.create();
     await harness.navigateByUrl('/math/abstract-algebra', NotebookComponent);
@@ -103,9 +130,10 @@ describe('Implemented notebook reader and responsive navigation', () => {
     expect(hint.open).toBeTrue();
   });
 
-  it('adapts Part 4 to exact phone, tablet, and laptop widths without horizontal overflow', async () => {
+  for (const [label, url] of [['Part 4', '/math/abstract-algebra/subgroups'], ['the Algebra contents', '/math/abstract-algebra']]) {
+  it(`adapts ${label} to exact phone, tablet, and laptop widths without horizontal overflow`, async () => {
     const harness = await RouterTestingHarness.create();
-    const page = await harness.navigateByUrl('/math/abstract-algebra/subgroups', NotebookComponent);
+    const page = await harness.navigateByUrl(url, NotebookComponent);
     await page.loadNote();
     harness.detectChanges();
     const root = harness.routeNativeElement!;
@@ -150,6 +178,8 @@ describe('Implemented notebook reader and responsive navigation', () => {
       }
     }
   });
+
+  }
 
   it('shows an empty-search message and restores the notes when cleared', async () => {
     const harness = await RouterTestingHarness.create();

@@ -13,14 +13,15 @@
     <div class="sidebar-inner">
       <h2>All notes</h2>
       <label for="note-search">Search title or subject</label>
-      <input id="note-search" type="search" placeholder="Find a note…" [value]="query" (input)="query = $any($event.target).value">
+      <input id="note-search" type="search" placeholder="Find a note…" [value]="query" (input)="setQuery($any($event.target).value)">
       <p class="count" role="status">{{ filteredNotes.length }} of {{ notes.length }} notes</p>
       <ng-container *ngFor="let subject of subjects">
         <details *ngIf="bySubject(subject).length" open>
           <summary>{{ subject === 'Mathematics' ? 'Math' : subject }}</summary>
           <ng-container *ngIf="subject === 'Mathematics'; else subjectNotes">
-            <div class="tree"><a routerLink="/math/abstract-algebra" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" ariaCurrentWhenActive="page" (click)="openNote()">Abstract Algebra</a>
-              <div class="tree"><a *ngFor="let note of bySubject(subject)" [routerLink]="note.path" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="openNote()"><ng-container *ngIf="note.part">Part {{ note.part }}: </ng-container>{{ note.title }}<small>{{ note.kind }}</small></a></div>
+            <div class="tree">
+              <div class="section-heading"><button class="section-toggle" type="button" (click)="algebraExpanded = !algebraExpanded" [attr.aria-expanded]="algebraExpanded" aria-controls="algebra-lessons" [attr.aria-label]="(algebraExpanded ? 'Collapse' : 'Expand') + ' Abstract Algebra lessons'"><span aria-hidden="true">{{ algebraExpanded ? '▾' : '▸' }}</span></button><a routerLink="/math/abstract-algebra" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" ariaCurrentWhenActive="page" (click)="openNote()">Abstract Algebra</a></div>
+              <div id="algebra-lessons" class="tree" [hidden]="!algebraExpanded"><a *ngFor="let note of bySubject(subject)" [routerLink]="note.path" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="openNote()"><ng-container *ngIf="note.part">Part {{ note.part }}: </ng-container>{{ note.title }}<small>{{ note.kind }}</small></a></div>
             </div>
           </ng-container>
           <ng-template #subjectNotes><a *ngFor="let note of bySubject(subject)" [routerLink]="note.path" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="openNote()">{{ note.title }}<small>{{ note.kind }}</small></a></ng-template>
@@ -48,7 +49,7 @@
         <section><h2>About the author</h2><p>My profile, CV, achievements, and earlier projects.</p><a routerLink="/profile">Visit my profile ↗</a></section>
       </ng-container>
       <ng-container *ngSwitchCase="'math'"><p class="eyebrow">Subject / Mathematics</p><h1>Math.</h1><p class="intro">Ideas, definitions, and reasoning, one concrete example at a time.</p><a class="entry" routerLink="/math/abstract-algebra"><small>Section</small><h2>Abstract Algebra ↗</h2><p>Begin with sets, operations, and closure.</p></a></ng-container>
-      <ng-container *ngSwitchCase="'algebra'"><p class="eyebrow">Math / Learning together</p><h1>Abstract Algebra.</h1><p class="intro">Sets, operations, and the structures they create. Build understanding through examples, proofs, and questions.</p><section><h2>Lessons</h2><a class="entry" *ngFor="let note of mathNotes" [routerLink]="note.path"><small><ng-container *ngIf="note.part">Part {{ note.part }} / </ng-container>{{ note.kind }}</small><h3>{{ note.title }} ↗</h3><p>{{ note.summary }}</p></a></section><section><h2>Where we’re going</h2><p>These topics are planned for later sessions:</p><ul class="planned"><li>Generated subgroups, cyclic groups, homomorphisms, and quotients</li><li>Rings, ideals, and polynomials</li><li>Fields, extensions, and Galois theory</li></ul></section></ng-container>
+      <ng-container *ngSwitchCase="'algebra'"><p class="eyebrow">Math / Learning together</p><h1>Abstract Algebra.</h1><p class="intro">Sets, operations, and the structures they create. Build understanding through examples, proofs, and questions.</p><section aria-labelledby="algebra-contents"><h2 id="algebra-contents">Contents</h2><p>Read in order, or choose the concept you want to revisit.</p><ol class="course-contents"><li *ngFor="let note of mathNotes"><a class="entry" [routerLink]="note.path"><small><ng-container *ngIf="note.part">Part {{ note.part }} / </ng-container>{{ note.kind }}</small><h3>{{ note.title }} ↗</h3><p><strong>TL;DR:</strong> {{ note.summary }}</p></a></li></ol></section><section><h2>Where we’re going</h2><p>These topics are planned for later sessions:</p><ul class="planned"><li>Generated subgroups, cyclic groups, homomorphisms, and quotients</li><li>Rings, ideals, and polynomials</li><li>Fields, extensions, and Galois theory</li></ul></section></ng-container>
       <ng-container *ngSwitchDefault>
         <article *ngIf="currentNote as note; else missing" [class.math-reader]="note.source === 'article'" [attr.aria-busy]="loading">
           <p class="eyebrow">{{ note.subject }}<ng-container *ngIf="note.section"> / {{ note.section }}</ng-container><ng-container *ngIf="note.part"> / Part {{ note.part }}</ng-container> / {{ note.kind }}</p><h1>{{ note.title }}</h1>
