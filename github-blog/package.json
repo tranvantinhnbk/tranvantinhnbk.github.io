@@ -6,15 +6,15 @@
     "start": "bun ./node_modules/@angular/cli/bin/ng.js serve",
     "build": "bun ./node_modules/@angular/cli/bin/ng.js build",
     "watch": "bun ./node_modules/@angular/cli/bin/ng.js build --watch --configuration development",
-    "test": "node ./node_modules/@angular/cli/bin/ng.js test",
+    "test": "bun ./node_modules/@angular/cli/bin/ng.js test",
     "content:build": "bun scripts/build-content.mjs",
     "prebuild": "bun run content:build",
     "prestart": "bun run content:build",
     "prewatch": "bun run content:build",
     "pretest": "bun run content:build",
     "test:content": "bun test ./scripts/build-content.test.mjs",
-    "test:routes": "bun run content:build && node ./node_modules/@angular/cli/bin/ng.js test --karma-config karma.conf.cjs --watch=false --browsers=ChromeHeadless --include=src/app/routing-compatibility.spec.ts",
-    "test:ui": "bun run content:build && node ./node_modules/@angular/cli/bin/ng.js test --karma-config karma.conf.cjs --watch=false --browsers=ChromeHeadless --include=src/app/notebook-ui.spec.ts"
+    "test:routes": "bun run content:build && bun ./node_modules/@angular/cli/bin/ng.js test --karma-config karma.conf.cjs --watch=false --browsers=ChromeHeadless --include=src/app/routing-compatibility.spec.ts",
+    "test:ui": "bun run content:build && bun ./node_modules/@angular/cli/bin/ng.js test --karma-config karma.conf.cjs --watch=false --browsers=ChromeHeadless --include=src/app/notebook-ui.spec.ts"
   },
   "private": true,
   "dependencies": {

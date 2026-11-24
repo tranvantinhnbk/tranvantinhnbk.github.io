@@ -28,7 +28,7 @@ The production build retains SCSS import deprecation, TensorFlow CommonJS, and b
 
 ## Maintenance
 
-The existing Pages workflow now runs `bun audit` immediately after frozen installation, including development dependencies. A nonzero audit result stops the job. Tests use Node 24 for the legacy Karma browser server; Bun remains the install/serve/build tool. Pages upload and deployment still require a manual workflow dispatch on `main`.
+The existing Pages workflow now runs `bun audit` immediately after frozen installation, including development dependencies. A nonzero audit result stops the job. All package scripts now run under Bun, including the browser tests, using the local Karma compatibility adapter. CI no longer installs Node. Pages upload and deployment still require a manual workflow dispatch on `main`.
 
 Reproduce from `github-blog/`:
 
@@ -42,7 +42,7 @@ bun run test:ui
 bun run build --configuration production --base-href /
 ```
 
-Browser tests require a compatible Node runtime and Chrome. Updating packages is separate from publishing the site. No commit, push, or deployment is part of this remediation.
+Browser tests require Bun 1.4.5 and Chrome. Updating packages is separate from publishing the site. No commit, push, or deployment is part of this remediation.
 
 ## References
 

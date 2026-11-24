@@ -26,7 +26,19 @@ bun install --frozen-lockfile
 bun run start
 ```
 
-Build: `bun run build`. See [local builds and manual GitHub Pages deployment](docs/deployment/github-pages.md). Dependency audit: `bun audit`; [remediation evidence](docs/security/dependency-remediation.md).
+Open http://localhost:4200. Build, check, and audit from `github-blog/`:
+
+```bash
+bun run build
+bun run test:content
+bun run test:routes
+bun run test:ui
+bun audit
+```
+
+Browser tests require Chrome. All commands use Bun; a separate Node installation is unnecessary.
+
+GitHub Actions builds and checks changes automatically. Publish manually through **Actions → Build / manual deploy GitHub Pages → Run workflow → main**. Pushes alone do not deploy. See [local builds and manual deployment](docs/deployment/github-pages.md) and [security remediation evidence](docs/security/dependency-remediation.md).
 
 ## For contributors and agents
 

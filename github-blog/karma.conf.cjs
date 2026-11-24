@@ -1,4 +1,5 @@
 module.exports = function (config) {
+  require('./scripts/karma-bun.cjs')(config);
   config.set({
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
     plugins: [
