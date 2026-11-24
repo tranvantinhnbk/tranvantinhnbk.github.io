@@ -21,6 +21,12 @@ export class NotebookComponent implements AfterViewInit {
   loading = false;
   error = false;
   articleHtml: SafeHtml | null = null;
+  articleAfterHtml: SafeHtml | null = null;
+  rotationExample = false;
+  rotationTurns = 0;
+  get rotationLabel() {
+    return ['e · 0° · identity', 'r · 90° counterclockwise', 'r² · 180°', 'r³ · 270° counterclockwise'][this.rotationTurns % 4];
+  }
   code: { python: string; typescript: string } | null = null;
   private request = 0;
   private abort?: AbortController;
@@ -73,6 +79,9 @@ export class NotebookComponent implements AfterViewInit {
     const request = ++this.request;
     this.abort?.abort();
     this.articleHtml = null;
+    this.articleAfterHtml = null;
+    this.rotationExample = false;
+    this.rotationTurns = 0;
     this.code = null;
     this.error = false;
     const note = this.currentNote;
@@ -89,7 +98,10 @@ export class NotebookComponent implements AfterViewInit {
           // Only our manifest-selected, build-generated asset reaches this boundary.
           // The builder disables raw Markdown HTML and KaTeX trust. Preserve KaTeX's
           // required layout styles and MathML, which Angular's generic sanitizer strips.
-          this.articleHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+          const [before, after] = html.split('<!-- ge-interactive:square-rotations -->');
+          this.articleHtml = this.sanitizer.bypassSecurityTrustHtml(before);
+          this.rotationExample = after !== undefined;
+          this.articleAfterHtml = after === undefined ? null : this.sanitizer.bypassSecurityTrustHtml(after);
         }
       } else {
         const { solution } = await import('../blog/leetcode/solution/content/solution');

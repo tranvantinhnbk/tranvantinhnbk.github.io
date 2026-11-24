@@ -2,6 +2,7 @@ import { Router } from '@angular/router';
 import { Component, inject } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']

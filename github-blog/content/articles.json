@@ -22,5 +22,17 @@
     "summary": "Learn to regroup operations, identify an element that does nothing, and find an inverse within the chosen set.",
     "path": "/math/abstract-algebra/associativity-identity-inverses",
     "source": "../docs/content/drafts/abstract-algebra/session-02.md"
+  },
+  {
+    "approved": true,
+    "part": 3,
+    "slug": "groups-and-first-examples",
+    "title": "Groups — putting the properties together",
+    "subject": "Mathematics",
+    "section": "Abstract Algebra",
+    "kind": "Learning session",
+    "summary": "Combine the group properties, explore square rotations, and prove cancellation.",
+    "path": "/math/abstract-algebra/groups-and-first-examples",
+    "source": "../docs/content/drafts/abstract-algebra/session-03.md"
   }
 ]

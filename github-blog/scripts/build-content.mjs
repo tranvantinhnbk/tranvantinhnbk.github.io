@@ -6,6 +6,12 @@ import katex from 'katex';
 
 export function createRenderer() {
   const md = new MarkdownIt({ html: false, linkify: false, typographer: true });
+  const codeFence = md.renderer.rules.fence;
+  md.renderer.rules.fence = (tokens, i, options, env, self) => {
+    if (tokens[i].info.trim() !== 'interactive:square-rotations') return codeFence(tokens, i, options, env, self);
+    if (tokens[i].level !== 0 || tokens[i].content.trim()) throw new Error('Square rotation example must be an empty top-level fence');
+    return '</div><!-- ge-interactive:square-rotations --><div class="ge-article">';
+  };
   const typeset = (tex, displayMode) => katex.renderToString(tex, {
     displayMode, throwOnError: true, trust: false, strict: 'error', output: 'htmlAndMathml',
   });
@@ -51,6 +57,7 @@ export function renderArticle(source) {
   const body = source.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, '');
   const md = createRenderer();
   const tokens = md.parse(body, {});
+  if (tokens.filter(token => token.type === 'fence' && token.info.trim() === 'interactive:square-rotations').length > 1) throw new Error('Only one square rotation example is supported per article');
   // The application renders the approved metadata title, so omit the duplicate Markdown h1.
   if (tokens[0]?.type === 'heading_open' && tokens[0].tag === 'h1') tokens.splice(0, 3);
   for (let i = 0; i < tokens.length; i++) {

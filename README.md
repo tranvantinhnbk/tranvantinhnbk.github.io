@@ -26,7 +26,7 @@ bun install --frozen-lockfile
 bun run start
 ```
 
-Build: `bun run build`. See [local builds and manual GitHub Pages deployment](docs/deployment/github-pages.md).
+Build: `bun run build`. See [local builds and manual GitHub Pages deployment](docs/deployment/github-pages.md). Dependency audit: `bun audit`; [remediation evidence](docs/security/dependency-remediation.md).
 
 ## For contributors and agents
 

@@ -11,7 +11,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { fromEvent } from 'rxjs';
 import { switchMap, takeUntil, pairwise } from 'rxjs/operators';
 import * as tf from '@tensorflow/tfjs';
-import { NgxOpenCVModule } from 'ngx-opencv';
 
 
 @Component({

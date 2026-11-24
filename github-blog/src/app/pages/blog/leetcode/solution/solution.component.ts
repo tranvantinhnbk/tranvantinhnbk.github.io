@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { HighlightJsDirective, HighlightJsModule } from 'ngx-highlight-js';
+import { HighlightJsDirective } from 'ngx-highlight-js';
 import { solution } from './content/solution';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -9,8 +9,6 @@ import { ActivatedRoute } from '@angular/router';
   standalone: true,
   imports: [
     CommonModule,
-
-    HighlightJsModule,
     HighlightJsDirective,
   ],
   templateUrl: './solution.component.html',

@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-24",
+  "bun_version": "1.4.5",
+  "node_test_runtime": "24.22.3",
+  "lockfile_sha256": "eef0007bff1a8548137958400937d6634a1778ca685fefeab45d1a261ed11e9f",
+  "commands": {
+    "bun audit --json": {
+      "exit_code": 0,
+      "result": {}
+    },
+    "bun audit --prod --json": {
+      "exit_code": 0,
+      "result": {}
+    }
+  }
+}

@@ -5,6 +5,16 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { renderArticle, buildContent } from './build-content.mjs';
 
+test('renders a safe rotation slot between balanced article sections and rejects malformed slots', () => {
+  const slot = '```interactive:square-rotations\n```\n';
+  const html = renderArticle('Before\n\n' + slot + '\nAfter');
+  assert.match(html, /<\/div><!-- ge-interactive:square-rotations --><div class="ge-article">/);
+  assert.match(html, /After/);
+  assert.doesNotMatch(html, /<script|<button/);
+  assert.throws(() => renderArticle(slot + '\n' + slot), /Only one/);
+  assert.throws(() => renderArticle('```interactive:square-rotations\nanything\n```'), /empty top-level/);
+});
+
 test('typesets inline fractions and aligned proofs, omitting the duplicate article title', () => {
   const html = renderArticle('# Article\n\nA fraction $\\frac{1}{2}$.\n\n$$\n\\begin{aligned}a+b&=2m+2n\\\\&=2(m+n)\\end{aligned}\n$$\n');
   assert.match(html, /<math/);

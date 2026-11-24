@@ -5,12 +5,14 @@ summary: "Classify familiar operations, recognize rotations as algebra, and deri
 subject: "Mathematics"
 section: "Abstract Algebra"
 type: "Learning session"
-status: "draft-for-author-review"
+status: "approved-for-implementation"
 ---
 
 # Part 3: Groups — putting the properties together
 
 Part 1 introduced closure. Part 2 introduced associativity, identity, and inverses. Now we combine these properties into one definition and see what it lets us prove.
+
+**By the end:** recognize a group, explain why a near miss fails, and prove cancellation using the group properties.
 
 A group is one kind of algebraic structure. Its requirements determine when the group label and its theorems apply. Operations that fail some requirements can still be studied.
 
@@ -21,6 +23,8 @@ A group is one kind of algebraic structure. Its requirements determine when the 
 1. **Associativity:** $(a\ast b)\ast c=a\ast(b\ast c)$ for all $a,b,c\in G$.
 2. **Identity:** there is an $e\in G$ with $e\ast a=a\ast e=a$ for every $a\in G$.
 3. **Inverses:** for every $a\in G$, there is an element $a^{-1}\in G$ with $a\ast a^{-1}=a^{-1}\ast a=e$.
+
+The notation $a^{-1}$ means the inverse for the chosen operation. For addition, this is $-a$; for multiplication of nonzero numbers, it is $1/a$. The identity $e$ likewise depends on the operation.
 
 Closure is included in the requirement that the operation maps $G\times G$ into $G$. Check it explicitly when examining an example.
 
@@ -73,6 +77,9 @@ A half-turn followed by a quarter-turn gives a three-quarter-turn. Four quarter-
 - **Inverses:** $e$ is its own inverse, $r$ and $r^3$ undo each other, and $r^2$ is its own inverse.
 
 So these rotations form a group. Its elements are transformations of a square, rather than ordinary numbers. The same definition applies to both examples.
+
+```interactive:square-rotations
+```
 
 ## What do the requirements let us prove?
 

@@ -1,0 +1,415 @@
+{
+  "@angular/common": [
+    {
+      "id": 1204770,
+      "url": "https://github.com/advisories/GHSA-p297-fm68-3q8c",
+      "title": "Angular: Information Leak via `HttpTransferCache` Bypass When Using `withRequestsMadeViaParent`",
+      "severity": "moderate",
+      "vulnerable_versions": "<=19.2.25",
+      "cwe": [
+        "CWE-200",
+        "CWE-524"
+      ],
+      "cvss": {
+        "score": 4,
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:L/I:N/A:N"
+      }
+    },
+    {
+      "id": 1120387,
+      "url": "https://github.com/advisories/GHSA-58c5-g7wp-6w37",
+      "title": "Angular is Vulnerable to XSRF Token Leakage via Protocol-Relative URLs in Angular HTTP Client",
+      "severity": "high",
+      "vulnerable_versions": "<19.2.16",
+      "cwe": [
+        "CWE-201",
+        "CWE-359"
+      ],
+      "cvss": {
+        "score": 0,
+        "vectorString": null
+      }
+    },
+    {
+      "id": 1130677,
+      "url": "https://github.com/advisories/GHSA-jhpw-976m-542j",
+      "title": "Angular: Cache-Key Ambiguity in HttpTransferCache Leading to Cross-Request Response Reuse and State Poisoning",
+      "severity": "high",
+      "vulnerable_versions": "<=19.2.25",
+      "cwe": [
+        "CWE-345"
+      ],
+      "cvss": {
+        "score": 0,
+        "vectorString": null
+      }
+    },
+    {
+      "id": 1123497,
+      "url": "https://github.com/advisories/GHSA-48r7-hpm6-gfxm",
+      "title": "@angular/common: Denial of Service (DoS) via OOM in Date Formatting (formatDate)",
+      "severity": "high",
+      "vulnerable_versions": "<=19.2.25",
+      "cwe": [
+        "CWE-400",
+        "CWE-1333"
+      ],
+      "cvss": {
+        "score": 7.5,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      }
+    },
+    {
+      "id": 1123501,
+      "url": "https://github.com/advisories/GHSA-39pv-4j6c-2g6v",
+      "title": "@angular/common: Weak 32-Bit Cache Key Hashing in `HttpTransferCache` Leading to Cross-Request Data Leakage and State Poisoning",
+      "severity": "high",
+      "vulnerable_versions": "<=19.2.25",
+      "cwe": [
+        "CWE-328",
+        "CWE-345"
+      ],
+      "cvss": {
+        "score": 6.1,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+      }
+    },
+    {
+      "id": 1123536,
+      "url": "https://github.com/advisories/GHSA-p3vc-36g9-x9gr",
+      "title": "@angular/common: Denial of Service (DoS) via OOM in Number Formatting (digitsInfo)",
+      "severity": "high",
+      "vulnerable_versions": "<=18.2.14",
+      "cwe": [
+        "CWE-400",
+        "CWE-834"
+      ],
+      "cvss": {
+        "score": 6.1,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+      }
+    },
+    {
+      "id": 1123541,
+      "url": "https://github.com/advisories/GHSA-q6f4-qqrg-jv6x",
+      "title": "@angular/common: Information Leak via Default Caching of Credentialed Requests in HttpTransferCache",
+      "severity": "high",
+      "vulnerable_versions": "<=18.2.14",
+      "cwe": [
+        "CWE-524"
+      ],
+      "cvss": {
+        "score": 7.5,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+      }
+    },
+    {
+      "id": 1247790,
+      "url": "https://github.com/advisories/GHSA-jfgx-762w-99vr",
+      "title": "@angular/common: XSRF Token Leakage via URL Parsing Discrepancy in Angular HTTP Client (Incomplete fix for CVE-2025-66035)",
+      "severity": "moderate",
+      "vulnerable_versions": "<=19.2.25",
+      "cwe": [
+        "CWE-201",
+        "CWE-359"
+      ],
+      "cvss": {
+        "score": 0,
+        "vectorString": null
+      }
+    }
+  ],
+  "@angular/compiler": [
+    {
+      "id": 1204774,
+      "url": "https://github.com/advisories/GHSA-hh8m-fm6v-7cvg",
+      "title": "Angular: Sanitization bypass via directive host bindings on concrete host elements in @angular/core and @angular/compiler",
+      "severity": "moderate",
+      "vulnerable_versions": "<=19.2.25",
+      "cwe": [
+        "CWE-79"
+      ],
+      "cvss": {
+        "score": 0,
+        "vectorString": null
+      }
+    },
+    {
+      "id": 1120372,
+      "url": "https://github.com/advisories/GHSA-jrmj-c5cx-3cw6",
+      "title": "Angular has XSS Vulnerability via Unsanitized SVG Script Attributes",
+      "severity": "high",
+      "vulnerable_versions": "<=18.2.14",
+      "cwe": [
+        "CWE-79"
+      ],
+      "cvss": {
+        "score": 0,
+        "vectorString": null
+      }
+    },
+    {
+      "id": 1120383,
+      "url": "https://github.com/advisories/GHSA-v4hv-rgfq-gp49",
+      "title": "Angular Stored XSS Vulnerability via SVG Animation, SVG URL and MathML Attributes",
+      "severity": "high",
+      "vulnerable_versions": "<=18.2.14",
+      "cwe": [
+        "CWE-79"
+      ],
+      "cvss": {
+        "score": 0,
+        "vectorString": null
+      }
+    },
+    {
+      "id": 1130697,
+      "url": "https://github.com/advisories/GHSA-jj27-h5hq-8x99",
+      "title": "Angular i18n: Cross-Site Scripting (XSS) via event-handler attributes",
+      "severity": "high",
+      "vulnerable_versions": "<=19.2.25",
+      "cwe": [
+        "CWE-79"
+      ],
+      "cvss": {
+        "score": 0,
+        "vectorString": null
+      }
+    },
+    {
+      "id": 1117732,
+      "url": "https://github.com/advisories/GHSA-g93w-mfhg-p222",
+      "title": "Angular vulnerable to XSS in i18n attribute bindings",
+      "severity": "high",
+      "vulnerable_versions": ">=17.0.0-next.0 <=18.2.14",
+      "cwe": [
+        "CWE-79"
+      ],
+      "cvss": {
+        "score": 9,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:H/I:H/A:H"
+      }
+    },
+    {
+      "id": 1123505,
+      "url": "https://github.com/advisories/GHSA-58w9-8g37-x9v5",
+      "title": "@angular/compiler: Two-Way Property Binding Sanitization Bypass (XSS)",
+      "severity": "moderate",
+      "vulnerable_versions": "<=19.2.25",
+      "cwe": [
+        "CWE-79"
+      ],
+      "cvss": {
+        "score": 6.1,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+      }
+    },
+    {
+      "id": 1123509,
+      "url": "https://github.com/advisories/GHSA-f3m7-gqxr-g87x",
+      "title": "Angular: Template and Attribute Namespace Sanitization Bypass (XSS)",
+      "severity": "moderate",
+      "vulnerable_versions": "<=18.2.14",
+      "cwe": [
+        "CWE-79"
+      ],
+      "cvss": {
+        "score": 6.1,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+      }
+    }
+  ],
+  "@angular/core": [
+    {
+      "id": 1204775,
+      "url": "https://github.com/advisories/GHSA-hh8m-fm6v-7cvg",
+      "title": "Angular: Sanitization bypass via directive host bindings on concrete host elements in @angular/core and @angular/compiler",
+      "severity": "moderate",
+      "vulnerable_versions": "<=19.2.25",
+      "cwe": [
+        "CWE-79"
+      ],
+      "cvss": {
+        "score": 0,
+        "vectorString": null
+      }
+    },
+    {
+      "id": 1113587,
+      "url": "https://github.com/advisories/GHSA-prjf-86w9-mfqv",
+      "title": "Angular i18n vulnerable to Cross-Site Scripting",
+      "severity": "high",
+      "vulnerable_versions": "<=18.2.14",
+      "cwe": [
+        "CWE-79"
+      ],
+      "cvss": {
+        "score": 6.1,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+      }
+    },
+    {
+      "id": 1120371,
+      "url": "https://github.com/advisories/GHSA-jrmj-c5cx-3cw6",
+      "title": "Angular has XSS Vulnerability via Unsanitized SVG Script Attributes",
+      "severity": "high",
+      "vulnerable_versions": "<=18.2.14",
+      "cwe": [
+        "CWE-79"
+      ],
+      "cvss": {
+        "score": 0,
+        "vectorString": null
+      }
+    },
+    {
+      "id": 1130693,
+      "url": "https://github.com/advisories/GHSA-jj27-h5hq-8x99",
+      "title": "Angular i18n: Cross-Site Scripting (XSS) via event-handler attributes",
+      "severity": "high",
+      "vulnerable_versions": "<=19.2.25",
+      "cwe": [
+        "CWE-79"
+      ],
+      "cvss": {
+        "score": 0,
+        "vectorString": null
+      }
+    },
+    {
+      "id": 1117734,
+      "url": "https://github.com/advisories/GHSA-g93w-mfhg-p222",
+      "title": "Angular vulnerable to XSS in i18n attribute bindings",
+      "severity": "high",
+      "vulnerable_versions": ">=17.0.0-next.0 <=18.2.14",
+      "cwe": [
+        "CWE-79"
+      ],
+      "cvss": {
+        "score": 9,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:H/I:H/A:H"
+      }
+    },
+    {
+      "id": 1123514,
+      "url": "https://github.com/advisories/GHSA-f3m7-gqxr-g87x",
+      "title": "Angular: Template and Attribute Namespace Sanitization Bypass (XSS)",
+      "severity": "moderate",
+      "vulnerable_versions": "<=18.2.14",
+      "cwe": [
+        "CWE-79"
+      ],
+      "cvss": {
+        "score": 6.1,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+      }
+    },
+    {
+      "id": 1123546,
+      "url": "https://github.com/advisories/GHSA-692r-grfm-v8x7",
+      "title": "@angular/core: Angular Template and Dynamic Component Namespace Bypass leading to Cross-Site Scripting (XSS)",
+      "severity": "moderate",
+      "vulnerable_versions": "<=18.2.14",
+      "cwe": [
+        "CWE-79"
+      ],
+      "cvss": {
+        "score": 6.1,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+      }
+    },
+    {
+      "id": 1123560,
+      "url": "https://github.com/advisories/GHSA-rgjc-h3x7-9mwg",
+      "title": "Angular Client Hydration DOM Clobbering & Response-Cache Poisoning",
+      "severity": "high",
+      "vulnerable_versions": "<=19.2.25",
+      "cwe": [
+        "CWE-79",
+        "CWE-471"
+      ],
+      "cvss": {
+        "score": 6.1,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+      }
+    }
+  ],
+  "@angular/router": [
+    {
+      "id": 1242591,
+      "url": "https://github.com/advisories/GHSA-62vg-58rm-qff7",
+      "title": "@angular/router: Denial of Service via Unmatched Empty-Path Outlet Route Matching in Server-Side Rendering (SSR)",
+      "severity": "high",
+      "vulnerable_versions": "<=19.2.25",
+      "cwe": [
+        "CWE-400",
+        "CWE-405"
+      ],
+      "cvss": {
+        "score": 0,
+        "vectorString": null
+      }
+    },
+    {
+      "id": 1240616,
+      "url": "https://github.com/advisories/GHSA-ff3f-86qr-9cv3",
+      "title": "Angular Server-Side Rendering (SSR): Denial of Service via Numeric URL Matrix Parameters",
+      "severity": "high",
+      "vulnerable_versions": "<=19.2.25",
+      "cwe": [
+        "CWE-400",
+        "CWE-770"
+      ],
+      "cvss": {
+        "score": 0,
+        "vectorString": null
+      }
+    }
+  ],
+  "form-data": [
+    {
+      "id": 1109538,
+      "url": "https://github.com/advisories/GHSA-fjxv-7rqg-78g4",
+      "title": "form-data uses unsafe random function in form-data for choosing boundary",
+      "severity": "critical",
+      "vulnerable_versions": ">=4.0.0 <4.0.4",
+      "cwe": [
+        "CWE-330"
+      ],
+      "cvss": {
+        "score": 0,
+        "vectorString": null
+      }
+    },
+    {
+      "id": 1120743,
+      "url": "https://github.com/advisories/GHSA-hmw2-7cc7-3qxx",
+      "title": "form-data: CRLF injection in form-data via unescaped multipart field names and filenames",
+      "severity": "high",
+      "vulnerable_versions": ">=4.0.0 <4.0.6",
+      "cwe": [
+        "CWE-93"
+      ],
+      "cvss": {
+        "score": 7.5,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+      }
+    }
+  ],
+  "pdfjs-dist": [
+    {
+      "id": 1118732,
+      "url": "https://github.com/advisories/GHSA-wgrm-67xf-hhpq",
+      "title": "PDF.js vulnerable to arbitrary JavaScript execution upon opening a malicious PDF",
+      "severity": "high",
+      "vulnerable_versions": "<=4.1.392",
+      "cwe": [
+        "CWE-754"
+      ],
+      "cvss": {
+        "score": 8.8,
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H"
+      }
+    }
+  ]
+}

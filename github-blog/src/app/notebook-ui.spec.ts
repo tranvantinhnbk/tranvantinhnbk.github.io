@@ -25,11 +25,11 @@ describe('Implemented notebook reader and responsive navigation', () => {
     expect(hint.open).toBeTrue();
   });
 
-  it('lists Parts 1 and 2 correctly and links between the real rendered lessons', async () => {
+  it('lists Parts 1, 2, and 3 correctly and links between the real rendered lessons', async () => {
     const harness = await RouterTestingHarness.create();
     await harness.navigateByUrl('/math/abstract-algebra', NotebookComponent);
     const secondUrl = '/math/abstract-algebra/associativity-identity-inverses';
-    expect(harness.routeNativeElement!.querySelectorAll('a.entry').length).toBe(2);
+    expect(harness.routeNativeElement!.querySelectorAll('a.entry').length).toBe(3);
     expect(harness.routeNativeElement!.textContent).toContain('Part 2');
     const first = await harness.navigateByUrl(lessonUrl, NotebookComponent);
     expect(first.nextLesson?.path).toBe(secondUrl);
@@ -44,13 +44,46 @@ describe('Implemented notebook reader and responsive navigation', () => {
     expect(root.querySelector('.ge-article math')).not.toBeNull();
     expect(root.querySelector('.ge-article mfrac')).not.toBeNull();
     expect(second.previousLesson?.path).toBe(lessonUrl);
-    expect(second.nextLesson).toBeUndefined();
-    expect(second.mathNotes.some(note => note.slug === 'groups-and-first-examples')).toBeFalse();
+    expect(second.nextLesson?.path).toBe('/math/abstract-algebra/groups-and-first-examples');
+    expect(second.mathNotes.some(note => note.slug === 'groups-and-first-examples')).toBeTrue();
   });
 
-  it('adapts Part 2 to exact phone, tablet, and laptop widths without horizontal overflow', async () => {
+  it('renders Part 3 around a working rotation example and clears it when leaving', async () => {
     const harness = await RouterTestingHarness.create();
-    const page = await harness.navigateByUrl('/math/abstract-algebra/associativity-identity-inverses', NotebookComponent);
+    const page = await harness.navigateByUrl('/math/abstract-algebra/groups-and-first-examples', NotebookComponent);
+    await page.loadNote();
+    harness.detectChanges();
+    const root = harness.routeNativeElement!;
+    expect(page.error).toBeFalse();
+    expect(root.querySelector('article h1')?.textContent).toContain('Groups');
+    expect(root.querySelector('.breadcrumb')?.textContent).toContain('Part 3');
+    expect(root.querySelectorAll('.ge-article').length).toBe(2);
+    expect(root.querySelector('.ge-article math')).not.toBeNull();
+    const demo = root.querySelector('.rotation-example')!;
+    expect(root.textContent).toContain('Left cancellation');
+    expect(demo.nextElementSibling?.textContent).toContain('Your turn');
+    const [turn, reset] = Array.from(demo.querySelectorAll('button'));
+    turn.click(); harness.detectChanges();
+    expect(demo.querySelector('[role=status]')?.textContent).toContain('90° counterclockwise');
+    for (let i = 0; i < 3; i++) turn.click();
+    harness.detectChanges();
+    expect(demo.querySelector('[role=status]')?.textContent).toContain('identity');
+    turn.click(); reset.click(); harness.detectChanges();
+    expect(page.rotationTurns).toBe(0);
+    expect(page.previousLesson?.part).toBe(2);
+    expect(page.nextLesson).toBeUndefined();
+    const hint = root.querySelector('details.math-hint') as HTMLDetailsElement;
+    (hint.querySelector('summary') as HTMLElement).click();
+    expect(hint.open).toBeTrue();
+    await harness.navigateByUrl(lessonUrl, NotebookComponent);
+    await page.loadNote(); harness.detectChanges();
+    expect(root.querySelector('.rotation-example')).toBeNull();
+    expect(page.articleAfterHtml).toBeNull();
+  });
+
+  it('adapts Part 3 to exact phone, tablet, and laptop widths without horizontal overflow', async () => {
+    const harness = await RouterTestingHarness.create();
+    const page = await harness.navigateByUrl('/math/abstract-algebra/groups-and-first-examples', NotebookComponent);
     await page.loadNote();
     harness.detectChanges();
     const root = harness.routeNativeElement!;

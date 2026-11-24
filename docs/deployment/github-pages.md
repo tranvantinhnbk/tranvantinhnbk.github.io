@@ -65,7 +65,7 @@ bun run test:ui
 bun run build
 ```
 
-The CI workflow runs these focused checks before building/uploading the site. Pages uploads and deployment still require a manual run from `main`; normal pushes and pull requests never deploy. No GitHub workflow run or live Pages deployment has been executed or checked by the agent. On a nearly full disk, `CI=true` disables Angular's default local persistent build cache for that process.
+The CI workflow audits the locked dependencies with `bun audit` and runs these focused checks before building/uploading the site. Pages uploads and deployment still require a manual run from `main`; normal pushes and pull requests never deploy. No GitHub workflow run or live Pages deployment has been executed or checked by the agent. On a nearly full disk, `CI=true` disables Angular's default local persistent build cache for that process.
 
 ## Profile migration smoke check
 
@@ -73,6 +73,6 @@ After starting the app, open `/profile`: it must show the original profile and P
 
 ## Bun migration — 2026-11-24
 
-The existing npm lockfile was migrated using Bun's [lockfile migration](https://bun.com/docs/pm/lockfile), preserving resolved dependencies. Serve/build scripts explicitly invoke the Angular CLI with Bun. Browser tests retain Node 20 for Karma: a Bun runtime trial failed in Karma dependency injection and, with explicit annotations, its HTTP server stalled. Run those tests through `bun run test:routes` / `bun run test:ui` with Node 20 on PATH. CI installs Node only for that compatibility requirement. Use `bun run build`, rather than `bun build` (which invokes Bun's bundler). Docker builds now use the repository root as context: `docker build -f github-blog/Dockerfile -t angular .`; this includes the approved Markdown outside the frontend directory. Manual deployment conditions are unchanged.
+The existing npm lockfile was migrated using Bun's [lockfile migration](https://bun.com/docs/pm/lockfile), preserving resolved dependencies. Serve/build scripts explicitly invoke the Angular CLI with Bun. Browser tests retain Node 24 for Karma: a Bun runtime trial failed in Karma dependency injection and, with explicit annotations, its HTTP server stalled. Run those tests through `bun run test:routes` / `bun run test:ui` with Node 24 on PATH. CI installs Node only for that compatibility requirement. Use `bun run build`, rather than `bun build` (which invokes Bun's bundler). Docker builds now use the repository root as context: `docker build -f github-blog/Dockerfile -t angular .`; this includes the approved Markdown outside the frontend directory. Manual deployment conditions are unchanged.
 
 Migration validation: frozen Bun installation, five content tests, five route regression tests, seven reader UI tests, the production build, and HTTP smoke checks for the home page, Part 2 route, and math asset pass. Existing build warnings remain. Docker build execution was unavailable because the Docker daemon is stopped; the Dockerfile changes have source inspection only. Bun was downloaded into temporary storage for these checks, not installed globally on the author's machine. Install Bun using the link above before running the new local commands.
