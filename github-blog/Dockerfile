@@ -1,9 +1,11 @@
 # Stage 1: Build the Angular application
-FROM node:hydrogen-slim as angular
+FROM oven/bun:1.4.5 AS angular
 WORKDIR /app
-COPY . .
-RUN npm ci
-RUN npm run build
+COPY github-blog/package.json github-blog/bun.lock ./
+RUN bun install --frozen-lockfile
+COPY github-blog/ .
+COPY docs/content/ /docs/content/
+RUN bun run build
 
 # Stage 2: Serve the application from Apache
 FROM httpd:alpine3.15
@@ -15,4 +17,4 @@ RUN sed -i 's#AllowOverride None#AllowOverride All#' /usr/local/apache2/conf/htt
 RUN sed -i 's/#LoadModule rewrite_module modules\/mod_rewrite.so/LoadModule rewrite_module modules\/mod_rewrite.so/' /usr/local/apache2/conf/httpd.conf
 
 # Add .htaccess file
-COPY .htaccess /usr/local/apache2/htdocs/
+COPY github-blog/.htaccess /usr/local/apache2/htdocs/

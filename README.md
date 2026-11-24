@@ -18,15 +18,15 @@ The ambition is to make this repository a trusted source of foundational knowled
 
 ## Website
 
-Angular frontend in `github-blog/`, intended for static hosting on GitHub Pages.
+Angular frontend in `github-blog/`, intended for static hosting on GitHub Pages. Install [Bun 1.4.5](https://bun.com/docs/installation) first.
 
 ```bash
 cd github-blog
-npm ci
-npm start
+bun install --frozen-lockfile
+bun run start
 ```
 
-Build: `npm run build`. See [local builds and manual GitHub Pages deployment](docs/deployment/github-pages.md).
+Build: `bun run build`. See [local builds and manual GitHub Pages deployment](docs/deployment/github-pages.md).
 
 ## For contributors and agents
 

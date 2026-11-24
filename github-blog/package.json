@@ -2,19 +2,19 @@
   "name": "github-blog",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "content:build": "node scripts/build-content.mjs",
-    "prebuild": "npm run content:build",
-    "prestart": "npm run content:build",
-    "prewatch": "npm run content:build",
-    "pretest": "npm run content:build",
-    "test:content": "node --test scripts/build-content.test.mjs",
-    "test:routes": "npm run content:build && ng test --karma-config karma.conf.cjs --watch=false --browsers=ChromeHeadless --include=src/app/routing-compatibility.spec.ts",
-    "test:ui": "npm run content:build && ng test --karma-config karma.conf.cjs --watch=false --browsers=ChromeHeadless --include=src/app/notebook-ui.spec.ts"
+    "ng": "bun ./node_modules/@angular/cli/bin/ng.js",
+    "start": "bun ./node_modules/@angular/cli/bin/ng.js serve",
+    "build": "bun ./node_modules/@angular/cli/bin/ng.js build",
+    "watch": "bun ./node_modules/@angular/cli/bin/ng.js build --watch --configuration development",
+    "test": "node ./node_modules/@angular/cli/bin/ng.js test",
+    "content:build": "bun scripts/build-content.mjs",
+    "prebuild": "bun run content:build",
+    "prestart": "bun run content:build",
+    "prewatch": "bun run content:build",
+    "pretest": "bun run content:build",
+    "test:content": "bun test ./scripts/build-content.test.mjs",
+    "test:routes": "bun run content:build && node ./node_modules/@angular/cli/bin/ng.js test --karma-config karma.conf.cjs --watch=false --browsers=ChromeHeadless --include=src/app/routing-compatibility.spec.ts",
+    "test:ui": "bun run content:build && node ./node_modules/@angular/cli/bin/ng.js test --karma-config karma.conf.cjs --watch=false --browsers=ChromeHeadless --include=src/app/notebook-ui.spec.ts"
   },
   "private": true,
   "dependencies": {
@@ -50,5 +50,6 @@
     "katex": "0.16.47",
     "markdown-it": "14.3.3",
     "typescript": "~5.2.2"
-  }
+  },
+  "packageManager": "bun@1.4.5"
 }

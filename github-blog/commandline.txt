@@ -1,10 +1,11 @@
- 1.  npm install -g angular-cli-ghpages.
- 2. ng build --configuration=production --base-href "https://tranvantinhnbk.github.io/"
- 3. ngh --dir dist/github-blog
-//Change the git ssh
-ssh-add -K ~/.ssh/personal  
+# From the repository root: see docs/deployment/github-pages.md
+cd github-blog
+bun install --frozen-lockfile
+bun run start
 
+# Production build (deployment uses the manual GitHub Actions button)
+bun run build --configuration production --base-href /
 
-//RUN DOCKERFILE 
-docker build . -t angular
-docker run -it -p 8080:80 angular
+# Docker: run from the repository root so approved Markdown is in context
+# docker build -f github-blog/Dockerfile -t angular .
+# docker run --rm -p 8080:80 angular

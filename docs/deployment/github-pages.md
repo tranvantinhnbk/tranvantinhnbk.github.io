@@ -4,14 +4,14 @@ The Angular build emits static HTML, JavaScript, CSS, PDFs, images, and model as
 
 ## Local development
 
-Use Node 20 for this existing Angular 17 checkout, following its [documented compatibility](https://angular.dev/reference/versions). Angular 17 is now unsupported; upgrading the framework and Node together is separate work. System Node/npm are not installed here; implementation checks on 2026-11-20 used a checksum-verified temporary Node 20.20.2 runtime. For ordinary terminal use, install a compatible Node version or explicitly add that temporary runtime to PATH while it exists.
+Install [Bun](https://bun.com/docs/installation) 1.4.5 (the version pinned in CI and `package.json`). Bun installs dependencies and runs the content pipeline and Angular CLI. `bun.lock` is the committed dependency lockfile; use frozen installation for reproducible builds.
 
 From the repository root:
 
 ```bash
 cd github-blog
-npm ci
-npm start -- --host 127.0.0.1
+bun install --frozen-lockfile
+bun run start --host 127.0.0.1
 ```
 
 Open `http://127.0.0.1:4200`. This runs Angular's development server, which supports deep-route refreshes.
@@ -20,8 +20,8 @@ Open `http://127.0.0.1:4200`. This runs Angular's development server, which supp
 
 ```bash
 cd github-blog
-npm ci
-npm run build -- --configuration production --base-href /
+bun install --frozen-lockfile
+bun run build --configuration production --base-href /
 cp dist/github-blog/index.html dist/github-blog/404.html
 touch dist/github-blog/.nojekyll
 python3 -m http.server 8080 --bind 127.0.0.1 --directory dist/github-blog
@@ -56,13 +56,13 @@ Markdown under `docs/content/drafts/` is not copied into the Angular output. Dra
 
 The implementation now passes the production build, five content-rendering tests, five Angular route regression tests, and five real-reader UI tests. The UI tests use exact 390, 768, and 1366 px browser frames; they are not physical-device or screenshot checks. The production build still reports bundle/style and legacy dependency warnings. Full results are in `docs/design/reviews/math-reader-implementation.md`.
 
-Useful checks from `github-blog/` with Node 20 on PATH:
+Useful checks from `github-blog/` with Bun on PATH:
 
 ```bash
-npm run test:content
-npm run test:routes
-npm run test:ui
-npm run build
+bun run test:content
+bun run test:routes
+bun run test:ui
+bun run build
 ```
 
 The CI workflow runs these focused checks before building/uploading the site. Pages uploads and deployment still require a manual run from `main`; normal pushes and pull requests never deploy. No GitHub workflow run or live Pages deployment has been executed or checked by the agent. On a nearly full disk, `CI=true` disables Angular's default local persistent build cache for that process.
@@ -70,3 +70,9 @@ The CI workflow runs these focused checks before building/uploading the site. Pa
 ## Profile migration smoke check
 
 After starting the app, open `/profile`: it must show the original profile and PDF viewer. Use its Achievements and Project navigation, then return to Blog. Check `/profile/achievements`, `/profile/projects/mnist`, and the old `/about`, `/certificate`, `/projects/mnist` aliases. Check both `#CV` and `#AT` on `/profile` and `/about` to select the original documents. Finally open a blog note and return to Profile; verify the profile navigation does not duplicate the blog header. These are required runtime checks, not checks already completed.
+
+## Bun migration — 2026-11-24
+
+The existing npm lockfile was migrated using Bun's [lockfile migration](https://bun.com/docs/pm/lockfile), preserving resolved dependencies. Serve/build scripts explicitly invoke the Angular CLI with Bun. Browser tests retain Node 20 for Karma: a Bun runtime trial failed in Karma dependency injection and, with explicit annotations, its HTTP server stalled. Run those tests through `bun run test:routes` / `bun run test:ui` with Node 20 on PATH. CI installs Node only for that compatibility requirement. Use `bun run build`, rather than `bun build` (which invokes Bun's bundler). Docker builds now use the repository root as context: `docker build -f github-blog/Dockerfile -t angular .`; this includes the approved Markdown outside the frontend directory. Manual deployment conditions are unchanged.
+
+Migration validation: frozen Bun installation, five content tests, five route regression tests, seven reader UI tests, the production build, and HTTP smoke checks for the home page, Part 2 route, and math asset pass. Existing build warnings remain. Docker build execution was unavailable because the Docker daemon is stopped; the Dockerfile changes have source inspection only. Bun was downloaded into temporary storage for these checks, not installed globally on the author's machine. Install Bun using the link above before running the new local commands.
