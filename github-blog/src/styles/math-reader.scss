@@ -1,0 +1,25 @@
+// Deliberately global but scoped: generated article HTML has no Angular style attributes.
+.ge-article {
+  color: #202d28;
+  font: 18px/1.85 Georgia, 'Times New Roman', serif;
+  p, li { font: inherit; color: #55645c; }
+  p { margin: 0 0 18px; }
+  h2 { font: 500 29px/1.3 Georgia, serif; letter-spacing: -.4px; margin: 48px 0 20px; }
+  strong { color: #202d28; }
+  .math-callout { border-left: 3px solid #375a37; background: #e9eee4; padding: 20px 24px; margin: 24px 0; }
+  .math-goal { border-top: 1px solid #ccd5c9; border-bottom: 1px solid #ccd5c9; padding: 20px 0; margin: 28px 0; }
+  .math-equation { max-width: 100%; overflow-x: auto; padding: 16px 8px; margin: 18px 0; color: #202d28; }
+  .math-equation:focus-visible, .math-table:focus-visible { outline: 2px solid #375a37; outline-offset: 3px; }
+  .katex-display { margin: 0; }
+  .math-table { max-width: 100%; overflow-x: auto; margin: 24px 0; }
+  table { width: 100%; border-collapse: collapse; font: 14px/1.6 system-ui, sans-serif; }
+  th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ccd5c9; vertical-align: top; }
+  th { background: #e9eee4; }
+  ol, ul { padding-left: 26px; }
+  li { padding: 5px 0; }
+  .math-hint { margin: 24px 0; padding: 16px 20px; background: #e9eee4; }
+  .math-hint summary { cursor: pointer; min-height: 44px; font: 15px/1.7 system-ui, sans-serif; }
+  .math-hint summary:focus-visible { outline: 2px solid #375a37; outline-offset: 3px; }
+  .math-hint p { font-size: 16px; margin-bottom: 0; }
+  @media (max-width: 620px) { font-size: 17px; h2 { font-size: 25px; } .math-callout { padding: 18px; } .katex { font-size: 1.05em; } }
+}

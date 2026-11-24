@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI Implement"
+  short_description: "Implement approved UI and preserve existing routes"
+  default_prompt: "Use $ui-implement to implement the approved design, preserve existing URLs, and validate the result."

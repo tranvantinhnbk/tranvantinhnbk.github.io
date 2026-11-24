@@ -1,6 +1,6 @@
 # General Engineering — Design brief
 
-Status: approved simple blog with note sidebar; approved migration of the existing profile UI under Profile. Migration implemented locally on 2026-11-17. Build and browser validation remain pending.
+Status: approved blog/Profile separation and Math reader implemented locally. Production build and focused content, route, and browser-frame UI checks pass as of 2026-11-21; manual visual/accessibility checks and deployment remain separate.
 
 ## Purpose
 
@@ -84,7 +84,79 @@ Source review with ui-review criteria: navigation destinations, content labels, 
 
 `.github/workflows/pages.yml` automatically builds frontend pushes and pull requests to `main`, without deploying or uploading a Pages artifact. At the author’s explicit request, deployment is manual only: **Actions → Build / manual deploy GitHub Pages → Run workflow**, selecting `main`. Both artifact upload and deployment require `workflow_dispatch` on `main` and a successful build. `docs/deployment/github-pages.md` explains local commands, Pages settings, lazy components, the SPA 404 fallback, and validation limits. This configuration is local and unexecuted; no commit, push, repository-setting change, or deployment occurred. Angular source and dependency inputs are unchanged in this draft task.
 
+## Math / Abstract Algebra section — requested 2026-11-18
+
+Organize this learning conversation under subject **Math (Mathematics) → Abstract Algebra**, with **Part 1: Sets, operations, and closure** as the first learning session. Subject, section, and content type remain distinct; this is a learning-session draft, not a published article. Proposed URLs: `/math`, `/math/abstract-algebra`, and `/math/abstract-algebra/sets-operations-closure`. These routes are a UI/content proposal and are not added to Angular in this task.
+
+`previews/math-abstract-algebra.html` reuses the accepted simple blog layout and adds nested sidebar navigation, title/subject search, a Math landing page, an Abstract Algebra section page, breadcrumbs, a lesson reader, a phone navigation toggle, and a practice hint. The four existing coding note titles remain in the preview index; their bodies are not duplicated. The broader science/engineering subjects remain visible on the preview homepage. The existing Profile UI is untouched.
+
+Learning notes are saved in `docs/content/drafts/abstract-algebra/session-01.md` for author discussion and review. The preview lesson is based on this session; later topics are explicitly planned and not linked as completed articles. Blog generation still requires author approval of the Markdown.
+
+Validation: HTML parsing, internal destination/source checks, draft labels, and `git diff --check` checked. Responsive rules use 620/900 px breakpoints. Connected browser navigation failed before rendering with a tooling error. Browser targets 390, 768, and 1366 px remain untested; no screenshot, viewport, interaction, or physical-device results are claimed. Preview and learning notes only; Angular and dependencies unchanged.
+
+## Mathematical typography and explanation — requested 2026-11-19
+
+Prioritize proper typesetting alongside clear explanations. Author Markdown uses `$...$` for inline math and `$$...$$` for display math, including `\mathbb`, fractions, set notation, quantifiers, and aligned proofs. Introduce notation in words and explain why each proof step follows. Use distinct definition, proposition, proof, counterexample, and exercise treatments without crowding the reading column.
+
+`previews/math-reader.html` refines Part 1 using the accepted simple blog shell. It opens directly into the lesson, retains the Math/Abstract Algebra navigation, and offers an author-preview-only **Show LaTeX source** toggle. MathML is handwritten for this finite prototype, with corresponding LaTeX stored in semantic annotations; the preview is not an automatic Markdown/LaTeX compiler. It needs no remote fonts, math scripts, or dependency changes. Native MathML supports the rendered fractions and aligned proof; viewport and assistive-technology behavior still require browser testing. See [MathML semantics](https://developer.mozilla.org/en-US/docs/Web/MathML/Reference/Element/semantics).
+
+The source lesson remains `docs/content/drafts/abstract-algebra/session-01.md`, now with LaTeX delimiters and the matching explanation/proof structure. Content remains draft for the author's review. Production renderer selection is still proposed: build-time KaTeX or another suitable renderer can later convert reviewed LaTeX to static HTML/MathML; this draft does not install or implement it. See [KaTeX delimiter documentation](https://katex.org/docs/autorender.html).
+
+Source checks validate every MathML expression as XML, the annotation/source toggle wiring, lesson navigation, and draft labels. Connected browser navigation failed again before rendering due to a tooling error. Browser targets remain 390, 768, and 1366 px; viewport, physical-device, screen-reader, and source-toggle interaction checks are pending. No screenshots or browser validation are claimed. No Angular, package, or deployment changes in this task.
+
+## Inline math reader review — 2026-11-20
+
+`previews/math-reader-inline.html` presents the current accepted layout for direct review in conversation; `previews/math-reader-review.html` is its generated standalone inspection wrapper. It preserves the section/lesson reader, typeset expressions, author-only source toggle, and phone navigation. Optional host design controls adjust reading text size and column width. Navigation and saved review state stay local; no Angular, dependency, content-publication, or deployment changes.
+
+Chrome inspection finally succeeded through native browser controls after the browser connector continued to be unavailable. The desktop default view and a 390 × 844 responsive viewport were visually inspected. The generated wrapper has horizontal inset spacing, so its embedded product is narrower than the outer browser viewport. The 390 px phone view wraps its header, breadcrumbs, and lesson title, and collapses the sidebar under All notes. Native browser accessibility observations confirmed the source checkbox switches between MathML and LaTeX, and the phone navigation expands the note tree. These are browser checks, not physical-device or screen-reader validation.
+
+Inspection found and fixed (1) source-mode styles failing to match the inline scope root, and (2) the intended blackboard-bold integer symbol rendering as an italic Z; the preview now uses the literal ℤ token while retaining `\mathbb{Z}` in its LaTeX annotation. The standalone math-reader prototype receives the same symbol correction.
+
+Remaining checks: 768 and 1366 px, full-article clipping/overflow measurement, search/empty results, exercise hint, complete keyboard navigation, appearance variants, and assistive technology. Attempts to continue wider inspection were interrupted when the user switched Chrome tabs; no further responsive results are claimed. The dedicated preview tab may retain its temporary 390 × 844 device-toolbar state because browser control was interrupted before reset. The wrapper console only showed blocked Lucide source-map requests from its helper runtime, with no observed article-script error; no security policy was weakened to load those maps.
+
+Current review status: author review pending. Mathematical content remains in Markdown awaiting author approval before blog generation.
+
+## Math reader implementation — accepted 2026-11-20
+
+The author accepted the displayed math reader and explicitly requested `ui-implement` plus implementation, while requiring existing blog paths to remain unchanged. This covers conversion of the displayed Part 1 lesson; it does not approve future lessons or deployment. The new repository skill is `.agents/skills/ui-implement/SKILL.md`.
+
+Implemented `/math`, `/math/abstract-algebra`, and `/math/abstract-algebra/sets-operations-closure` in the existing notebook shell. Root `/`, `/notes/:slug`, `/blog/leetcode`, `/blog/leetcode/solution/:name`, Profile routes, and original profile/demo aliases remain valid. Original blog paths retain their query strings and fragments. No replacement Portfolio page was added.
+
+Approved Markdown is explicitly selected by `github-blog/content/articles.json`. A prebuild/prestart step renders it with Markdown HTML disabled and KaTeX trust disabled, generates static article HTML/MathML and a small metadata index, and leaves unapproved drafts out. Article bodies load on demand; KaTeX's JavaScript compiler runs at build time. Generated assets/catalog and dependency/build directories are ignored by Git. The public reader omits preview-only author controls; the hint remains interactive.
+
+Validation and review: [implementation review](reviews/math-reader-implementation.md). Five content tests, five route regression tests, and five reader UI tests pass. The UI tests use exact 390, 768, and 1366 px browser-frame viewports and verify the real generated math plus navigation, search, retry, stale responses, and overflow. Production build passes with bundle/style/CommonJS warnings; physical-device and full manual accessibility/screenshot review remain unverified. The original 34 blog/profile/demo source files are unchanged. Skill validation and whitespace checks pass. No commit, push, or deployment performed by the agent.
+
+## Part 1 implementation recheck — 2026-11-21
+
+The author reaffirmed approval to implement Part 1. The approved implementation is present; fresh production build, content (5), route (5), and real-reader UI (5) checks pass. Existing root/blog/Profile URLs remain unchanged. The local Angular app and generated lesson asset return HTTP 200 for browser-style HTML requests. The actual lesson was exposed in Chrome's native accessibility tree; desktop visual capture and magnified device-toolbar capture were inconclusive, so no new screenshot/physical-device/accessibility audit is claimed.
+
+Local review URL while the development server runs: `http://127.0.0.1:4200/math/abstract-algebra/sets-operations-closure`. No duplicate implementation, new article, commit, push, or deployment was needed or performed. See [implementation review](reviews/math-reader-implementation.md) for precise evidence and limits.
+
+## Session 2 scope and Computing removal — 2026-11-22
+
+Session 2 introduces **associativity, identity, and inverses** with examples, notation explanations, and exercises. Groups are a brief connection to a later lesson, not the main topic. The new Markdown draft is `docs/content/drafts/abstract-algebra/session-02.md`, awaiting author review before registration in the approved article manifest. Part 1 and its URL stay unchanged.
+
+At the author's explicit request, Computing is removed from the visible blog catalog: subject list, search, sidebar, homepage note cards, and the original coding-index shortcut. The archive metadata remains available only for resolving existing `/notes/:slug` links. Original `/blog/leetcode` and `/blog/leetcode/solution/:name` routes and original coding content remain intact to honor the existing URL contract. Science/engineering subjects and the original Profile stay available. Historical preview files are retained as earlier drafts; they are not the current public catalog.
+
+Validation for this change: Session 2 renders with the existing Markdown/KaTeX pipeline without being added to the approved manifest; six real-reader UI tests pass, including Computing absence, saved-note lookup, search, and exact-width frame checks. Production build passes with the existing budget/CommonJS warnings. Original blog routing/source files were not edited by this catalog change. No commit, push, or deployment performed.
+
+## Part 2 implementation — accepted 2026-11-22
+
+The author clarified the request by invoking `ui-implement` for the next session. This approves conversion of Part 2, **Associativity, identity, and inverses**, using the accepted reader. The earlier Session 2 draft status above is superseded. Part 3 remains an unregistered Markdown draft for later review.
+
+Implemented `/math/abstract-algebra/associativity-identity-inverses` from `docs/content/drafts/abstract-algebra/session-02.md`. The approved manifest now contains Parts 1 and 2. Lesson numbers come from metadata in the sidebar, breadcrumbs, section index, and reader; previous/next links connect the two lessons. Both article bodies remain lazy-loaded static HTML/MathML generated from Markdown and LaTeX. Computing remains absent from the visible catalog, with saved coding URLs preserved. No route definitions, legacy profile/demo source, or deployment settings were changed for Part 2.
+
+Validation: seven reader UI tests pass, including Part 2 navigation/math and exact 390/768/1366 px browser-frame overflow/menu checks; five content tests and five route regression tests pass; production build passes with the known budget/CommonJS warnings. The local lesson route and generated article return HTTP 200. These checks do not constitute a new manual screenshot, physical-device, or full accessibility audit. See [implementation review](reviews/math-reader-implementation.md). No commit, push, or deployment performed.
+
+Local review: `http://127.0.0.1:4200/math/abstract-algebra/associativity-identity-inverses` while the development server runs.
+
 ## Preview and decisions
+
+- `previews/math-reader-inline.html`: current in-conversation math reader; inspection wrapper is `previews/math-reader-review.html`.
+
+- `previews/math-reader.html`: current math-reader refinement with typeset notation and explanations, awaiting review.
+
+- `previews/math-abstract-algebra.html`: current Math → Abstract Algebra section/lesson draft, awaiting author review.
 
 - `previews/portfolio-colorful.html`: superseded exploration; author chose the existing profile UI instead.
 - `previews/portfolio-layout.html`: superseded grouping exploration; no Portfolio overview will be implemented.

@@ -3,6 +3,7 @@
 - Read `README.md` for the project purpose and `docs/design/brief.md` for UI work.
 - For a redesign, draft reviewable screens before changing the Angular application. Implement once the user chooses a direction; an existing choice remains valid.
 - Use `ui-draft` for design previews and `ui-review` to review a proposed design or its implementation. Skills live in `.agents/skills/`.
+- Use `ui-implement` to implement an approved design, preserve existing URLs, and run focused validation; implementation does not authorize deployment.
 - Keep design decisions in `docs/design/brief.md` and previews in `docs/design/previews/`. Mark proposed and accepted decisions clearly.
 - Preserve the breadth of science and engineering. SI and RSI are long-term ambitions, not demonstrated capabilities.
 - Label illustrative content; do not invent published articles, research results, or contribution status.

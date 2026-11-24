@@ -4,7 +4,7 @@ The Angular build emits static HTML, JavaScript, CSS, PDFs, images, and model as
 
 ## Local development
 
-Use Node 20 for this existing Angular 17 checkout, following its [documented compatibility](https://angular.dev/reference/versions). Angular 17 is now unsupported; upgrading the framework and Node together is separate work. Node/npm are currently missing on this machine, so these commands have not been run here.
+Use Node 20 for this existing Angular 17 checkout, following its [documented compatibility](https://angular.dev/reference/versions). Angular 17 is now unsupported; upgrading the framework and Node together is separate work. System Node/npm are not installed here; implementation checks on 2026-11-20 used a checksum-verified temporary Node 20.20.2 runtime. For ordinary terminal use, install a compatible Node version or explicitly add that temporary runtime to PATH while it exists.
 
 From the repository root:
 
@@ -54,7 +54,18 @@ Markdown under `docs/content/drafts/` is not copied into the Angular output. Dra
 
 ## Validation status
 
-Workflow YAML and source paths can be inspected locally. A successful Angular build, dependency installation, GitHub Actions run, and live Pages deployment have not been verified: Node/npm and node_modules are absent locally. Treat the first CI run as required validation, not a deployment already completed.
+The implementation now passes the production build, five content-rendering tests, five Angular route regression tests, and five real-reader UI tests. The UI tests use exact 390, 768, and 1366 px browser frames; they are not physical-device or screenshot checks. The production build still reports bundle/style and legacy dependency warnings. Full results are in `docs/design/reviews/math-reader-implementation.md`.
+
+Useful checks from `github-blog/` with Node 20 on PATH:
+
+```bash
+npm run test:content
+npm run test:routes
+npm run test:ui
+npm run build
+```
+
+The CI workflow runs these focused checks before building/uploading the site. Pages uploads and deployment still require a manual run from `main`; normal pushes and pull requests never deploy. No GitHub workflow run or live Pages deployment has been executed or checked by the agent. On a nearly full disk, `CI=true` disables Angular's default local persistent build cache for that process.
 
 ## Profile migration smoke check
 

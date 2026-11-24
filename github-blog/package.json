@@ -6,7 +6,15 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "content:build": "node scripts/build-content.mjs",
+    "prebuild": "npm run content:build",
+    "prestart": "npm run content:build",
+    "prewatch": "npm run content:build",
+    "pretest": "npm run content:build",
+    "test:content": "node --test scripts/build-content.test.mjs",
+    "test:routes": "npm run content:build && ng test --karma-config karma.conf.cjs --watch=false --browsers=ChromeHeadless --include=src/app/routing-compatibility.spec.ts",
+    "test:ui": "npm run content:build && ng test --karma-config karma.conf.cjs --watch=false --browsers=ChromeHeadless --include=src/app/notebook-ui.spec.ts"
   },
   "private": true,
   "dependencies": {
@@ -39,6 +47,8 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "katex": "0.16.47",
+    "markdown-it": "14.3.3",
     "typescript": "~5.2.2"
   }
 }

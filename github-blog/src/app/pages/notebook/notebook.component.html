@@ -1,8 +1,9 @@
-<a class="skip" href="#notebook-content">Skip to content</a>
+<a class="skip" href="#notebook-content" (click)="skipToContent($event)">Skip to content</a>
 <header>
   <a class="brand" routerLink="/">General Engineering<span>TRAN VAN TINH / OPEN NOTEBOOK</span></a>
   <nav aria-label="Main navigation">
     <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Blog</a>
+    <a routerLink="/math" routerLinkActive="active">Math</a>
     <a routerLink="/profile">Profile</a>
   </nav>
 </header>
@@ -11,40 +12,54 @@
   <aside id="note-sidebar" aria-label="All notes">
     <div class="sidebar-inner">
       <h2>All notes</h2>
-      <label for="note-search">Search notes</label>
-      <input id="note-search" type="search" placeholder="Title or subject…" [value]="query" (input)="query = $any($event.target).value">
+      <label for="note-search">Search title or subject</label>
+      <input id="note-search" type="search" placeholder="Find a note…" [value]="query" (input)="query = $any($event.target).value">
       <p class="count" role="status">{{ filteredNotes.length }} of {{ notes.length }} notes</p>
       <ng-container *ngFor="let subject of subjects">
         <details *ngIf="bySubject(subject).length" open>
-          <summary>{{ subject }} · {{ bySubject(subject).length }}</summary>
-          <a *ngFor="let note of bySubject(subject)" [routerLink]="['/notes', note.slug]" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="openNote()">{{ note.title }}<small>Coding note</small></a>
+          <summary>{{ subject === 'Mathematics' ? 'Math' : subject }}</summary>
+          <ng-container *ngIf="subject === 'Mathematics'; else subjectNotes">
+            <div class="tree"><a routerLink="/math/abstract-algebra" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" ariaCurrentWhenActive="page" (click)="openNote()">Abstract Algebra</a>
+              <div class="tree"><a *ngFor="let note of bySubject(subject)" [routerLink]="note.path" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="openNote()"><ng-container *ngIf="note.part">Part {{ note.part }}: </ng-container>{{ note.title }}<small>{{ note.kind }}</small></a></div>
+            </div>
+          </ng-container>
+          <ng-template #subjectNotes><a *ngFor="let note of bySubject(subject)" [routerLink]="note.path" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="openNote()">{{ note.title }}<small>{{ note.kind }}</small></a></ng-template>
         </details>
       </ng-container>
       <p *ngIf="!filteredNotes.length">No matching notes. Try another search.</p>
-      <div class="portfolio"><h2>Profile</h2><a routerLink="/profile">Profile, CV &amp; earlier work ↗</a></div><a routerLink="/blog/leetcode">Original coding index ↗</a>
+      <div class="portfolio"><h2>Profile</h2><a routerLink="/profile">Profile, CV &amp; earlier work ↗</a></div>
     </div>
   </aside>
   <main id="notebook-content" #content tabindex="-1">
-    <ng-container *ngIf="!slug; else reader">
-      <p class="eyebrow">Across disciplines. Shared questions.</p>
-      <h1>Ideas worth<br>building on.</h1>
-      <p class="intro">A notebook of ideas, abstractions, and knowledge across science and engineering.</p>
-      <section><h2>From the notebook</h2><p>The existing coding notes are available below. Other subjects will grow as material is added.</p>
-        <a class="entry" *ngFor="let note of notes" [routerLink]="['/notes', note.slug]" (click)="openNote()"><small>{{ note.subject }} / Coding note</small><h3>{{ note.title }} ↗</h3></a>
-      </section>
-      <section><h2>Across science and engineering</h2><p>{{ subjects.join(' · ') }}</p><p>Contributing foundations others can build on toward superintelligence and recursive self-improvement is a long-term ambition.</p></section>
-      <section><h2>About the author</h2><p>My profile, CV, achievements, and earlier projects.</p><a routerLink="/profile">Visit my profile ↗</a></section>
+    <nav *ngIf="page !== 'home'" class="breadcrumb" aria-label="Breadcrumb">
+      <a routerLink="/">Blog</a><span aria-hidden="true">/</span>
+      <ng-container *ngIf="page === 'math' || page === 'algebra' || page === 'math-lesson'; else codeCrumb">
+        <a *ngIf="page !== 'math'; else mathCurrent" routerLink="/math">Math</a><ng-template #mathCurrent><span aria-current="page">Math</span></ng-template>
+        <ng-container *ngIf="page !== 'math'"><span aria-hidden="true">/</span><a *ngIf="page === 'math-lesson'; else algebraCurrent" routerLink="/math/abstract-algebra">Abstract Algebra</a><ng-template #algebraCurrent><span aria-current="page">Abstract Algebra</span></ng-template></ng-container>
+        <ng-container *ngIf="page === 'math-lesson'"><span aria-hidden="true">/</span><span aria-current="page">{{ currentPartLabel }}</span></ng-container>
+      </ng-container>
+      <ng-template #codeCrumb><span aria-current="page">{{ currentNote?.title || 'Note not found' }}</span></ng-template>
+    </nav>
+    <ng-container [ngSwitch]="page">
+      <ng-container *ngSwitchCase="'home'">
+        <p class="eyebrow">Across disciplines. Shared questions.</p><h1>Ideas worth<br>building on.</h1><p class="intro">A notebook of ideas, abstractions, and knowledge across science and engineering.</p>
+        <section><h2>From the notebook</h2><a class="entry" *ngFor="let note of notes" [routerLink]="note.path" (click)="openNote()"><small>{{ note.subject }}<ng-container *ngIf="note.section"> / {{ note.section }}</ng-container> / {{ note.kind }}</small><h3>{{ note.title }} ↗</h3><p *ngIf="note.summary">{{ note.summary }}</p></a></section>
+        <section><h2>Across science and engineering</h2><p>{{ subjects.join(' · ') }}</p><p>Contributing foundations others can build on toward superintelligence and recursive self-improvement is a long-term ambition.</p><a routerLink="/math">Explore Math ↗</a></section>
+        <section><h2>About the author</h2><p>My profile, CV, achievements, and earlier projects.</p><a routerLink="/profile">Visit my profile ↗</a></section>
+      </ng-container>
+      <ng-container *ngSwitchCase="'math'"><p class="eyebrow">Subject / Mathematics</p><h1>Math.</h1><p class="intro">Ideas, definitions, and reasoning, one concrete example at a time.</p><a class="entry" routerLink="/math/abstract-algebra"><small>Section</small><h2>Abstract Algebra ↗</h2><p>Begin with sets, operations, and closure.</p></a></ng-container>
+      <ng-container *ngSwitchCase="'algebra'"><p class="eyebrow">Math / Learning together</p><h1>Abstract Algebra.</h1><p class="intro">Sets, operations, and the structures they create. Build understanding through examples, proofs, and questions.</p><section><h2>Lessons</h2><a class="entry" *ngFor="let note of mathNotes" [routerLink]="note.path"><small><ng-container *ngIf="note.part">Part {{ note.part }} / </ng-container>{{ note.kind }}</small><h3>{{ note.title }} ↗</h3><p>{{ note.summary }}</p></a></section><section><h2>Where we’re going</h2><p>These topics are planned for later sessions:</p><ul class="planned"><li>Groups, subgroups, homomorphisms, and quotients</li><li>Rings, ideals, and polynomials</li><li>Fields, extensions, and Galois theory</li></ul></section></ng-container>
+      <ng-container *ngSwitchDefault>
+        <article *ngIf="currentNote as note; else missing" [class.math-reader]="note.source === 'article'" [attr.aria-busy]="loading">
+          <p class="eyebrow">{{ note.subject }}<ng-container *ngIf="note.section"> / {{ note.section }}</ng-container><ng-container *ngIf="note.part"> / Part {{ note.part }}</ng-container> / {{ note.kind }}</p><h1>{{ note.title }}</h1>
+          <p *ngIf="loading" role="status">Loading note…</p><div *ngIf="error" role="alert"><p>This note could not load.</p><button (click)="loadNote()">Try again</button></div>
+          <div *ngIf="articleHtml" [innerHTML]="articleHtml"></div>
+          <ng-container *ngIf="note.source === 'coding'"><p>From the existing coding collection. Code is preserved as written; correctness has not been revalidated during this UI update.</p><ng-container *ngIf="code"><section *ngIf="code.python"><h2>Python</h2><pre tabindex="0" aria-label="Python code"><code>{{ code.python }}</code></pre></section><section *ngIf="code.typescript"><h2>TypeScript</h2><pre tabindex="0" aria-label="TypeScript code"><code>{{ code.typescript }}</code></pre></section></ng-container></ng-container>
+          <nav *ngIf="note.source === 'article'" class="reader-nav" aria-label="Lesson navigation"><a *ngIf="previousLesson as previous" [routerLink]="previous.path">← Part {{ previous.part }}: {{ previous.title }}</a><a *ngIf="nextLesson as next" [routerLink]="next.path">Part {{ next.part }}: {{ next.title }} →</a><a routerLink="/math/abstract-algebra">All Abstract Algebra lessons</a></nav>
+        </article>
+        <ng-template #missing><h1>Note not found.</h1><a routerLink="/">Back to the notebook</a></ng-template>
+      </ng-container>
     </ng-container>
-    <ng-template #reader>
-      <article *ngIf="currentNote as note; else missing">
-        <a routerLink="/">← Notebook</a><p class="eyebrow">{{ note.subject }} / Coding note</p><h1>{{ note.title }}</h1>
-        <p>From the existing coding collection. Code is preserved as written; correctness has not been revalidated during this UI update.</p>
-        <p *ngIf="loading" role="status">Loading note…</p>
-        <div *ngIf="error" role="alert"><p>This note could not load.</p><button (click)="loadNote()">Try again</button></div>
-        <ng-container *ngIf="code"><section *ngIf="code.python"><h2>Python</h2><pre tabindex="0" aria-label="Python code"><code>{{ code.python }}</code></pre></section><section *ngIf="code.typescript"><h2>TypeScript</h2><pre tabindex="0" aria-label="TypeScript code"><code>{{ code.typescript }}</code></pre></section></ng-container>
-      </article>
-      <ng-template #missing><h1>Note not found.</h1><a routerLink="/">Back to the notebook</a></ng-template>
-    </ng-template>
     <footer>Independent thinking. Shared knowledge.</footer>
   </main>
 </div>

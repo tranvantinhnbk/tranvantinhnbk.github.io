@@ -11,6 +11,6 @@ export class AppComponent {
   private readonly router = inject(Router);
   get isNotebook() {
     const path = this.router.url.split(/[?#]/)[0];
-    return path === '/' || path.startsWith('/notes/');
+    return path === '/' || path.startsWith('/notes/') || path === '/math' || path.startsWith('/math/');
   }
 }

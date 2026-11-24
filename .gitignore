@@ -1,1 +1,8 @@
 *.pyc
+
+# Local frontend dependencies, build output and generated approved content
+github-blog/node_modules/
+github-blog/dist/
+github-blog/.angular/
+github-blog/src/assets/content/
+github-blog/src/app/pages/notebook/generated-content.ts

@@ -5,11 +5,13 @@ name: Build / manual deploy GitHub Pages
     branches: [main]
     paths:
       - 'github-blog/**'
+      - 'docs/content/**'
       - '.github/workflows/pages.yml'
   pull_request:
     branches: [main]
     paths:
       - 'github-blog/**'
+      - 'docs/content/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -38,6 +40,12 @@ jobs:
           cache-dependency-path: github-blog/package-lock.json
       - name: Install locked dependencies
         run: npm ci
+      - name: Check approved content rendering
+        run: npm run test:content
+      - name: Check existing and new routes
+        run: npm run test:routes
+      - name: Check responsive reader behavior
+        run: npm run test:ui
       - name: Build static site
         run: npm run build -- --configuration production --base-href /
       - name: Prepare client-side route fallback

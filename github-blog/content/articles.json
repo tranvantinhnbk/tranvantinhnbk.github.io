@@ -1,0 +1,26 @@
+[
+  {
+    "approved": true,
+    "slug": "sets-operations-closure",
+    "title": "Sets, operations, and closure",
+    "subject": "Mathematics",
+    "section": "Abstract Algebra",
+    "kind": "Learning session",
+    "summary": "Choose your objects, define an operation, and check whether its results stay inside the set.",
+    "path": "/math/abstract-algebra/sets-operations-closure",
+    "source": "../docs/content/drafts/abstract-algebra/session-01.md",
+    "part": 1
+  },
+  {
+    "approved": true,
+    "part": 2,
+    "slug": "associativity-identity-inverses",
+    "title": "Associativity, identity, and inverses",
+    "subject": "Mathematics",
+    "section": "Abstract Algebra",
+    "kind": "Learning session",
+    "summary": "Learn to regroup operations, identify an element that does nothing, and find an inverse within the chosen set.",
+    "path": "/math/abstract-algebra/associativity-identity-inverses",
+    "source": "../docs/content/drafts/abstract-algebra/session-02.md"
+  }
+]

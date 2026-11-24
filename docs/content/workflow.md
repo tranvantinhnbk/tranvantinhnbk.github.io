@@ -11,3 +11,9 @@ No public note, Angular page, or deployment changes during idea preparation.
 Example: `Use $content-prepare to discuss this idea with me and draft it in Markdown for my review.`
 
 Review only: `Use $content-review to review this article and verify its sources. Leave the article unchanged.`
+
+## Implementing reviewed content
+
+Use `$ui-implement` after the author accepts the UI and approves the displayed lesson for conversion. The application builds only entries explicitly selected with `approved: true` in `github-blog/content/articles.json`. The manifest points to the editable Markdown; other draft files are not copied to the website. `npm start` and `npm run build` generate article assets and navigation metadata first. Run `npm run content:build` again after changing approved Markdown during an existing dev-server session.
+
+Existing blog URLs, including `/blog/leetcode` and `/blog/leetcode/solution/:name`, stay valid. Adding a Math section does not migrate those links. Deployment remains a separate manual workflow action.
