@@ -1,0 +1,7 @@
+# Part 4 content and conversion review
+
+Date: 2026-11-24. Self-review by the implementation agent. The author reviewed the subgroup checks, asked why the identity must be inherited, accepted the proof and inherited-associativity explanation, and then explicitly requested `ui-implement`. This approves Part 4 conversion in the existing reader; it does not authorize future lessons or deployment.
+
+Verdict: ready for conversion. A subgroup is defined as a subset using the restricted ambient operation. Associativity is inherited; identity membership, closure, and inverse membership give the remaining group axioms. The added identity proof performs its inverse calculation in the ambient group and correctly shows any proposed identity f must equal e, without assuming inverse closure in the subset. The even-integer and square-half-turn examples satisfy the criterion; nonnegative integers fail inverse closure, and {e,r} fails closure. The one-step subgroup test includes nonemptiness, proves both directions, and correctly translates to differences for additive groups without changing the group operation to subtraction.
+
+The multiples-of-four and positive-rational exercises are left for readers to attempt. Generated subgroups and cyclic groups are planned only. Claims are elementary definitions or internally justified proofs, with no research/publication claims or external citation verification implied. UI, route, and build evidence is recorded separately in the design brief.

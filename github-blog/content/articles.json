@@ -34,5 +34,17 @@
     "summary": "Combine the group properties, explore square rotations, and prove cancellation.",
     "path": "/math/abstract-algebra/groups-and-first-examples",
     "source": "../docs/content/drafts/abstract-algebra/session-03.md"
+  },
+  {
+    "approved": true,
+    "part": 4,
+    "slug": "subgroups",
+    "title": "Subgroups — groups inside groups",
+    "subject": "Mathematics",
+    "section": "Abstract Algebra",
+    "kind": "Learning session",
+    "summary": "Check identity, closure, and inverses inside a subset, inherit associativity, and prove the subgroup test.",
+    "path": "/math/abstract-algebra/subgroups",
+    "source": "../docs/content/drafts/abstract-algebra/session-04.md"
   }
 ]

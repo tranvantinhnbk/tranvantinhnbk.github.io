@@ -25,11 +25,11 @@ describe('Implemented notebook reader and responsive navigation', () => {
     expect(hint.open).toBeTrue();
   });
 
-  it('lists Parts 1, 2, and 3 correctly and links between the real rendered lessons', async () => {
+  it('lists Parts 1 through 4 correctly and links between the real rendered lessons', async () => {
     const harness = await RouterTestingHarness.create();
     await harness.navigateByUrl('/math/abstract-algebra', NotebookComponent);
     const secondUrl = '/math/abstract-algebra/associativity-identity-inverses';
-    expect(harness.routeNativeElement!.querySelectorAll('a.entry').length).toBe(3);
+    expect(harness.routeNativeElement!.querySelectorAll('a.entry').length).toBe(4);
     expect(harness.routeNativeElement!.textContent).toContain('Part 2');
     const first = await harness.navigateByUrl(lessonUrl, NotebookComponent);
     expect(first.nextLesson?.path).toBe(secondUrl);
@@ -71,7 +71,7 @@ describe('Implemented notebook reader and responsive navigation', () => {
     turn.click(); reset.click(); harness.detectChanges();
     expect(page.rotationTurns).toBe(0);
     expect(page.previousLesson?.part).toBe(2);
-    expect(page.nextLesson).toBeUndefined();
+    expect(page.nextLesson?.path).toBe('/math/abstract-algebra/subgroups');
     const hint = root.querySelector('details.math-hint') as HTMLDetailsElement;
     (hint.querySelector('summary') as HTMLElement).click();
     expect(hint.open).toBeTrue();
@@ -81,9 +81,31 @@ describe('Implemented notebook reader and responsive navigation', () => {
     expect(page.articleAfterHtml).toBeNull();
   });
 
-  it('adapts Part 3 to exact phone, tablet, and laptop widths without horizontal overflow', async () => {
+  it('renders the approved subgroup lesson, identity proof, table, and hint without the rotation component', async () => {
     const harness = await RouterTestingHarness.create();
-    const page = await harness.navigateByUrl('/math/abstract-algebra/groups-and-first-examples', NotebookComponent);
+    const page = await harness.navigateByUrl('/math/abstract-algebra/subgroups', NotebookComponent);
+    await page.loadNote(); harness.detectChanges();
+    const root = harness.routeNativeElement!;
+    expect(page.error).toBeFalse();
+    expect(root.querySelector('article h1')?.textContent).toBe('Subgroups — groups inside groups');
+    expect(root.querySelector('.breadcrumb')?.textContent).toContain('Part 4');
+    expect(root.textContent).toContain('Could the subset have a different identity?');
+    expect(root.textContent).toContain('We inherit associativity');
+    expect(root.textContent).toContain('One-step subgroup test');
+    expect(root.querySelector('.ge-article math')).not.toBeNull();
+    expect(root.querySelectorAll('.math-table tbody tr').length).toBe(2);
+    expect(root.querySelector('.rotation-example')).toBeNull();
+    expect(page.previousLesson?.part).toBe(3);
+    expect(root.querySelector('.reader-nav a[href="/math/abstract-algebra/groups-and-first-examples"]')).not.toBeNull();
+    expect(page.nextLesson).toBeUndefined();
+    const hint = root.querySelector('details.math-hint') as HTMLDetailsElement;
+    (hint.querySelector('summary') as HTMLElement).click();
+    expect(hint.open).toBeTrue();
+  });
+
+  it('adapts Part 4 to exact phone, tablet, and laptop widths without horizontal overflow', async () => {
+    const harness = await RouterTestingHarness.create();
+    const page = await harness.navigateByUrl('/math/abstract-algebra/subgroups', NotebookComponent);
     await page.loadNote();
     harness.detectChanges();
     const root = harness.routeNativeElement!;

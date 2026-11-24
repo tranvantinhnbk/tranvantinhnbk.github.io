@@ -200,3 +200,15 @@ Validation: six content tests, five route regression tests, and eight reader UI 
 Self-review with `ui-review` found no blocking difference from the accepted preview. The production equations use the existing KaTeX HTML/MathML styling rather than the preview's native-MathML-only display. Route definitions, original profile/demo templates and assets, manual-only deployment, and the prior security fixes remain unchanged by this task. Whitespace checks pass. No commit, push, or deployment performed.
 
 Local review while the production-output server runs: `http://127.0.0.1:4302/math/abstract-algebra/groups-and-first-examples`. This loopback server serves only the built output and uses a local SPA fallback; it does not change GitHub Pages behavior.
+
+## Part 4 implementation — accepted 2026-11-24
+
+The author reviewed the subgroup draft, discussed identity inheritance and inherited associativity, accepted those explanations, and explicitly requested `ui-implement`. This approves Part 4 in the already accepted math reader; no new visual direction or future-lesson approval is implied.
+
+Implemented `/math/abstract-algebra/subgroups` from `docs/content/drafts/abstract-algebra/session-04.md`. Added the discussed proof that a subgroup cannot choose a different identity, making clear that the inverse calculation takes place in the ambient group. The lesson also covers the three checks, inherited associativity, examples/counterexamples, the nonempty one-step subgroup test, and practice. The approved manifest lists four lessons; existing numbering and previous/next navigation connect Parts 3 and 4. Generated subgroups and cyclic groups remain planned only. Reader layout, styles, component code, dependencies, and route definitions are unchanged. Article bodies still load on demand; Part 4 does not instantiate Part 3's rotation component.
+
+Validation: six content tests, five route regressions, and nine reader UI tests pass (20 total), including Part 4 proof/table/math/hint, numbering/navigation, and exact-width 390/768/1366 px browser-frame layout checks. Production build passes with the existing SCSS/CommonJS/budget warnings. Independent real production-browser checks at exact 390, 768, and 1366 px viewports render all 123 MathML elements, the two-row operation table, and the identity proof, with no horizontal overflow or observed uncaught JavaScript exceptions. Native Enter opens the hint at each width. Navigating back through the reader loads Part 3, restores its rotation example, and exposes the next link to Part 4. Phone/laptop screenshots of the identity-proof section were visually inspected. These checks are not physical-device or comprehensive accessibility audits.
+
+Self-review using `ui-review` found no blocking departure from the accepted reader. Original legacy template/asset hashes and the manual-only deployment gates remain unchanged. Whitespace check passes. No commit, push, or deployment performed.
+
+Local review while the existing production-output server runs: `http://127.0.0.1:4302/math/abstract-algebra/subgroups`.
