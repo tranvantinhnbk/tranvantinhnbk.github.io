@@ -46,5 +46,17 @@
     "summary": "Check identity, closure, and inverses inside a subset, inherit associativity, and prove the subgroup test.",
     "path": "/math/abstract-algebra/subgroups",
     "source": "../docs/content/drafts/abstract-algebra/session-04.md"
+  },
+  {
+    "approved": true,
+    "part": 5,
+    "slug": "generated-subgroups-and-cyclic-groups",
+    "title": "Generated subgroups and cyclic groups",
+    "subject": "Mathematics",
+    "section": "Abstract Algebra",
+    "kind": "Learning session",
+    "summary": "Build a subgroup from one element, distinguish finite and infinite cyclic groups, and find an element's order.",
+    "path": "/math/abstract-algebra/generated-subgroups-and-cyclic-groups",
+    "source": "../docs/content/drafts/abstract-algebra/session-05.md"
   }
 ]

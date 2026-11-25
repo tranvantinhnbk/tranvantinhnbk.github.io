@@ -49,13 +49,23 @@
         <section><h2>About the author</h2><p>My profile, CV, achievements, and earlier projects.</p><a routerLink="/profile">Visit my profile ↗</a></section>
       </ng-container>
       <ng-container *ngSwitchCase="'math'"><p class="eyebrow">Subject / Mathematics</p><h1>Math.</h1><p class="intro">Ideas, definitions, and reasoning, one concrete example at a time.</p><a class="entry" routerLink="/math/abstract-algebra"><small>Section</small><h2>Abstract Algebra ↗</h2><p>Begin with sets, operations, and closure.</p></a></ng-container>
-      <ng-container *ngSwitchCase="'algebra'"><p class="eyebrow">Math / Learning together</p><h1>Abstract Algebra.</h1><p class="intro">Sets, operations, and the structures they create. Build understanding through examples, proofs, and questions.</p><section aria-labelledby="algebra-contents"><h2 id="algebra-contents">Contents</h2><p>Read in order, or choose the concept you want to revisit.</p><ol class="course-contents"><li *ngFor="let note of mathNotes"><a class="entry" [routerLink]="note.path"><small><ng-container *ngIf="note.part">Part {{ note.part }} / </ng-container>{{ note.kind }}</small><h3>{{ note.title }} ↗</h3><p><strong>TL;DR:</strong> {{ note.summary }}</p></a></li></ol></section><section><h2>Where we’re going</h2><p>These topics are planned for later sessions:</p><ul class="planned"><li>Generated subgroups, cyclic groups, homomorphisms, and quotients</li><li>Rings, ideals, and polynomials</li><li>Fields, extensions, and Galois theory</li></ul></section></ng-container>
+      <ng-container *ngSwitchCase="'algebra'"><p class="eyebrow">Math / Learning together</p><h1>Abstract Algebra.</h1><p class="intro">Sets, operations, and the structures they create. Build understanding through examples, proofs, and questions.</p><section aria-labelledby="algebra-contents"><h2 id="algebra-contents">Contents</h2><p>Read in order, or choose the concept you want to revisit.</p><ol class="course-contents"><li *ngFor="let note of mathNotes"><a class="entry" [routerLink]="note.path"><small><ng-container *ngIf="note.part">Part {{ note.part }} / </ng-container>{{ note.kind }}</small><h3>{{ note.title }} ↗</h3><p><strong>TL;DR:</strong> {{ note.summary }}</p></a></li></ol></section><section><h2>Where we’re going</h2><p>These topics are planned for later sessions:</p><ul class="planned"><li>Cosets, homomorphisms, and quotients</li><li>Rings, ideals, and polynomials</li><li>Fields, extensions, and Galois theory</li></ul></section></ng-container>
       <ng-container *ngSwitchDefault>
         <article *ngIf="currentNote as note; else missing" [class.math-reader]="note.source === 'article'" [attr.aria-busy]="loading">
           <p class="eyebrow">{{ note.subject }}<ng-container *ngIf="note.section"> / {{ note.section }}</ng-container><ng-container *ngIf="note.part"> / Part {{ note.part }}</ng-container> / {{ note.kind }}</p><h1>{{ note.title }}</h1>
           <p *ngIf="loading" role="status">Loading note…</p><div *ngIf="error" role="alert"><p>This note could not load.</p><button (click)="loadNote()">Try again</button></div>
           <div *ngIf="articleHtml" [innerHTML]="articleHtml"></div>
-          <section *ngIf="rotationExample" class="rotation-example" aria-labelledby="rotation-heading">
+          <section *ngIf="rotationExample && note.part === 5" class="rotation-example" aria-labelledby="generator-heading">
+            <p class="eyebrow">Explore the generated subgroup</p><h2 id="generator-heading">Choose your generator</h2>
+            <p>Repeat one rotation. The marked corner shows its orientation.</p>
+            <label for="generator-choice">Starting element</label>
+            <select id="generator-choice" #generator (change)="setRotationStep(generator.value)"><option value="1">r · quarter-turn</option><option value="2">r² · half-turn</option><option value="3">r³ · three-quarter-turn</option><option value="0">e · identity</option></select>
+            <div class="rotation-stage"><div class="rotation-square" aria-hidden="true" [style.transform]="'rotate(' + (-90 * generatedPosition) + 'deg)'"><span>1</span></div></div>
+            <p class="rotation-status" role="status" aria-live="polite">{{ generatedStatus }}</p>
+            <p>Distinct rotations reached: &#123; {{ generatedElements }} &#125; · {{ generatedCount }} of {{ generatedOrder }} in this generated subgroup.</p>
+            <div class="rotation-controls"><button type="button" (click)="rotationTurns = rotationTurns + 1">Apply generator</button><button type="button" (click)="rotationTurns = 0">Reset</button></div>
+          </section>
+          <section *ngIf="rotationExample && note.part !== 5" class="rotation-example" aria-labelledby="rotation-heading">
             <p class="eyebrow">Explore the group</p><h2 id="rotation-heading">Compose a quarter-turn</h2>
             <p>Follow the marked corner. Each click applies the same counterclockwise rotation.</p>
             <div class="rotation-stage"><div class="rotation-square" aria-hidden="true" [style.transform]="'rotate(' + (-90 * rotationTurns) + 'deg)'"><span>1</span></div></div>

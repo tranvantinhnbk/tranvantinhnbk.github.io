@@ -38,7 +38,7 @@ describe('Implemented notebook reader and responsive navigation', () => {
     const search = root.querySelector('input[type=search]') as HTMLInputElement;
     search.value = 'subgroups'; search.dispatchEvent(new Event('input')); harness.detectChanges();
     expect(lessons.hidden).toBeFalse();
-    expect(lessons.querySelectorAll('a').length).toBe(1);
+    expect(lessons.querySelectorAll('a').length).toBe(2);
     search.value = ''; search.dispatchEvent(new Event('input')); harness.detectChanges();
     toggle.click(); harness.detectChanges();
     (root.querySelector('.section-heading a') as HTMLAnchorElement).click();
@@ -46,17 +46,18 @@ describe('Implemented notebook reader and responsive navigation', () => {
     const overview = harness.routeNativeElement!;
     expect(overview.querySelector('#algebra-contents')?.textContent).toBe('Contents');
     const entries = Array.from(overview.querySelectorAll('.course-contents a'));
-    expect(entries.length).toBe(4);
+    expect(entries.length).toBe(5);
     expect(entries.every(entry => entry.textContent!.includes('TL;DR:'))).toBeTrue();
     expect(entries[0].textContent).toContain('closure');
     expect(entries[3].getAttribute('href')).toBe('/math/abstract-algebra/subgroups');
+    expect(entries[4].getAttribute('href')).toBe('/math/abstract-algebra/generated-subgroups-and-cyclic-groups');
   });
 
-  it('lists Parts 1 through 4 correctly and links between the real rendered lessons', async () => {
+  it('lists Parts 1 through 5 correctly and links between the real rendered lessons', async () => {
     const harness = await RouterTestingHarness.create();
     await harness.navigateByUrl('/math/abstract-algebra', NotebookComponent);
     const secondUrl = '/math/abstract-algebra/associativity-identity-inverses';
-    expect(harness.routeNativeElement!.querySelectorAll('a.entry').length).toBe(4);
+    expect(harness.routeNativeElement!.querySelectorAll('a.entry').length).toBe(5);
     expect(harness.routeNativeElement!.textContent).toContain('Part 2');
     const first = await harness.navigateByUrl(lessonUrl, NotebookComponent);
     expect(first.nextLesson?.path).toBe(secondUrl);
@@ -124,13 +125,40 @@ describe('Implemented notebook reader and responsive navigation', () => {
     expect(root.querySelector('.rotation-example')).toBeNull();
     expect(page.previousLesson?.part).toBe(3);
     expect(root.querySelector('.reader-nav a[href="/math/abstract-algebra/groups-and-first-examples"]')).not.toBeNull();
-    expect(page.nextLesson).toBeUndefined();
+    expect(page.nextLesson?.part).toBe(5);
     const hint = root.querySelector('details.math-hint') as HTMLDetailsElement;
     (hint.querySelector('summary') as HTMLElement).click();
     expect(hint.open).toBeTrue();
   });
 
-  for (const [label, url] of [['Part 4', '/math/abstract-algebra/subgroups'], ['the Algebra contents', '/math/abstract-algebra']]) {
+  it('renders Part 5 and compares generators without changing the earlier rotation example', async () => {
+    const harness = await RouterTestingHarness.create();
+    const page = await harness.navigateByUrl('/math/abstract-algebra/generated-subgroups-and-cyclic-groups', NotebookComponent);
+    await page.loadNote(); harness.detectChanges();
+    const root = harness.routeNativeElement!;
+    expect(page.error).toBeFalse();
+    expect(root.querySelector('.breadcrumb')?.textContent).toContain('Part 5');
+    expect(root.querySelectorAll('.ge-article').length).toBe(2);
+    expect(root.textContent).toContain('Cyclic means one generator');
+    expect(root.querySelector('.ge-article math')).not.toBeNull();
+    expect(root.querySelectorAll('.math-table tbody tr').length).toBe(4);
+    const demo = root.querySelector('.rotation-example')!;
+    const choice = demo.querySelector('select') as HTMLSelectElement;
+    choice.value = '2'; choice.dispatchEvent(new Event('change')); harness.detectChanges();
+    const [apply, reset] = Array.from(demo.querySelectorAll('button'));
+    apply.click(); apply.click(); harness.detectChanges();
+    expect(demo.querySelector('[role=status]')?.textContent).toContain('order 2');
+    expect(demo.textContent).toContain('e, r²');
+    reset.click(); harness.detectChanges();
+    expect(page.rotationTurns).toBe(0);
+    expect(page.previousLesson?.part).toBe(4);
+    expect(page.nextLesson).toBeUndefined();
+    await harness.navigateByUrl('/math/abstract-algebra/subgroups', NotebookComponent);
+    await page.loadNote(); harness.detectChanges();
+    expect(root.querySelector('.rotation-example')).toBeNull();
+  });
+
+  for (const [label, url] of [['Part 5', '/math/abstract-algebra/generated-subgroups-and-cyclic-groups'], ['the Algebra contents', '/math/abstract-algebra']]) {
   it(`adapts ${label} to exact phone, tablet, and laptop widths without horizontal overflow`, async () => {
     const harness = await RouterTestingHarness.create();
     const page = await harness.navigateByUrl(url, NotebookComponent);

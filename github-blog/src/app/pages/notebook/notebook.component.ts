@@ -25,9 +25,23 @@ export class NotebookComponent implements AfterViewInit {
   articleAfterHtml: SafeHtml | null = null;
   rotationExample = false;
   rotationTurns = 0;
+  rotationStep = 1;
   get rotationLabel() {
     return ['e · 0° · identity', 'r · 90° counterclockwise', 'r² · 180°', 'r³ · 270° counterclockwise'][this.rotationTurns % 4];
   }
+  get generatedOrder() { return this.rotationStep === 0 ? 1 : this.rotationStep === 2 ? 2 : 4; }
+  get generatedPosition() { return this.rotationTurns * this.rotationStep % 4; }
+  get generatedStatus() {
+    const labels = ['e', 'r', 'r²', 'r³'];
+    const returned = this.rotationTurns === this.generatedOrder ? ` · First return to identity; order ${this.generatedOrder}` : '';
+    return `Applications: ${this.rotationTurns} · Current: ${labels[this.generatedPosition]}${returned}`;
+  }
+  get generatedElements() {
+    const labels = ['e', 'r', 'r²', 'r³'];
+    return [...new Set(Array.from({ length: Math.min(this.rotationTurns + 1, this.generatedOrder) }, (_, index) => labels[index * this.rotationStep % 4]))].join(', ');
+  }
+  get generatedCount() { return Math.min(this.rotationTurns + 1, this.generatedOrder); }
+  setRotationStep(value: string) { this.rotationStep = Number(value); this.rotationTurns = 0; }
   code: { python: string; typescript: string } | null = null;
   private request = 0;
   private abort?: AbortController;
@@ -87,6 +101,7 @@ export class NotebookComponent implements AfterViewInit {
     this.articleAfterHtml = null;
     this.rotationExample = false;
     this.rotationTurns = 0;
+    this.rotationStep = 1;
     this.code = null;
     this.error = false;
     const note = this.currentNote;
