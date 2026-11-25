@@ -58,5 +58,17 @@
     "summary": "Build a subgroup from one element, distinguish finite and infinite cyclic groups, and find an element's order.",
     "path": "/math/abstract-algebra/generated-subgroups-and-cyclic-groups",
     "source": "../docs/content/drafts/abstract-algebra/session-05.md"
+  },
+  {
+    "approved": true,
+    "part": 6,
+    "slug": "cosets-and-partitions",
+    "title": "Cosets — moving a subgroup through a group",
+    "subject": "Mathematics",
+    "section": "Abstract Algebra",
+    "kind": "Learning session",
+    "summary": "Use a subgroup to sort its parent group into cosets, starting with the general definition and then integer remainders.",
+    "path": "/math/abstract-algebra/cosets-and-partitions",
+    "source": "../docs/content/drafts/abstract-algebra/session-06.md"
   }
 ]

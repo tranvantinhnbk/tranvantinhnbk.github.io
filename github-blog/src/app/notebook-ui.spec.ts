@@ -46,18 +46,19 @@ describe('Implemented notebook reader and responsive navigation', () => {
     const overview = harness.routeNativeElement!;
     expect(overview.querySelector('#algebra-contents')?.textContent).toBe('Contents');
     const entries = Array.from(overview.querySelectorAll('.course-contents a'));
-    expect(entries.length).toBe(5);
+    expect(entries.length).toBe(6);
     expect(entries.every(entry => entry.textContent!.includes('TL;DR:'))).toBeTrue();
     expect(entries[0].textContent).toContain('closure');
     expect(entries[3].getAttribute('href')).toBe('/math/abstract-algebra/subgroups');
     expect(entries[4].getAttribute('href')).toBe('/math/abstract-algebra/generated-subgroups-and-cyclic-groups');
+    expect(entries[5].getAttribute('href')).toBe('/math/abstract-algebra/cosets-and-partitions');
   });
 
-  it('lists Parts 1 through 5 correctly and links between the real rendered lessons', async () => {
+  it('lists Parts 1 through 6 correctly and links between the real rendered lessons', async () => {
     const harness = await RouterTestingHarness.create();
     await harness.navigateByUrl('/math/abstract-algebra', NotebookComponent);
     const secondUrl = '/math/abstract-algebra/associativity-identity-inverses';
-    expect(harness.routeNativeElement!.querySelectorAll('a.entry').length).toBe(5);
+    expect(harness.routeNativeElement!.querySelectorAll('a.entry').length).toBe(6);
     expect(harness.routeNativeElement!.textContent).toContain('Part 2');
     const first = await harness.navigateByUrl(lessonUrl, NotebookComponent);
     expect(first.nextLesson?.path).toBe(secondUrl);
@@ -152,13 +153,35 @@ describe('Implemented notebook reader and responsive navigation', () => {
     reset.click(); harness.detectChanges();
     expect(page.rotationTurns).toBe(0);
     expect(page.previousLesson?.part).toBe(4);
-    expect(page.nextLesson).toBeUndefined();
+    expect(page.nextLesson?.path).toBe('/math/abstract-algebra/cosets-and-partitions');
     await harness.navigateByUrl('/math/abstract-algebra/subgroups', NotebookComponent);
     await page.loadNote(); harness.detectChanges();
     expect(root.querySelector('.rotation-example')).toBeNull();
   });
 
-  for (const [label, url] of [['Part 5', '/math/abstract-algebra/generated-subgroups-and-cyclic-groups'], ['the Algebra contents', '/math/abstract-algebra']]) {
+  it('renders Part 6 with the abstract definition before the integer examples and links back to Part 5', async () => {
+    const harness = await RouterTestingHarness.create();
+    const page = await harness.navigateByUrl('/math/abstract-algebra/cosets-and-partitions', NotebookComponent);
+    await page.loadNote(); harness.detectChanges();
+    const root = harness.routeNativeElement!;
+    expect(page.error).toBeFalse();
+    expect(root.querySelector('.breadcrumb')?.textContent).toContain('Part 6');
+    expect(root.querySelector('article h1')?.textContent).toContain('Cosets');
+    const headings = Array.from(root.querySelectorAll('.ge-article h2')).map(heading => heading.textContent);
+    expect(headings.indexOf('Define the objects before the example')).toBeLessThan(headings.indexOf('Example: integer remainders are cosets'));
+    expect(root.textContent).toContain('parent group');
+    expect(root.textContent).toContain('Every element lands in one piece');
+    expect(root.querySelectorAll('.ge-article math').length).toBeGreaterThan(0);
+    expect(root.querySelector('.rotation-example')).toBeNull();
+    const hint = root.querySelector('details.math-hint') as HTMLDetailsElement;
+    (hint.querySelector('summary') as HTMLElement).click();
+    expect(hint.open).toBeTrue();
+    expect(page.previousLesson?.part).toBe(5);
+    expect(page.nextLesson).toBeUndefined();
+    expect(root.querySelector('.reader-nav a[href="/math/abstract-algebra/generated-subgroups-and-cyclic-groups"]')).not.toBeNull();
+  });
+
+  for (const [label, url] of [['Part 6', '/math/abstract-algebra/cosets-and-partitions'], ['the Algebra contents', '/math/abstract-algebra']]) {
   it(`adapts ${label} to exact phone, tablet, and laptop widths without horizontal overflow`, async () => {
     const harness = await RouterTestingHarness.create();
     const page = await harness.navigateByUrl(url, NotebookComponent);
