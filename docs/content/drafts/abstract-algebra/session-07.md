@@ -5,7 +5,7 @@ summary: "Prove that a finite subgroup's size divides its group's size, then use
 subject: "Mathematics"
 section: "Abstract Algebra"
 type: "Learning session"
-status: "draft-for-author-review"
+status: "approved-for-implementation"
 ---
 
 # Part 7: Lagrange’s theorem — counting with cosets

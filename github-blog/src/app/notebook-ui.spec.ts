@@ -46,19 +46,20 @@ describe('Implemented notebook reader and responsive navigation', () => {
     const overview = harness.routeNativeElement!;
     expect(overview.querySelector('#algebra-contents')?.textContent).toBe('Contents');
     const entries = Array.from(overview.querySelectorAll('.course-contents a'));
-    expect(entries.length).toBe(6);
+    expect(entries.length).toBe(7);
     expect(entries.every(entry => entry.textContent!.includes('TL;DR:'))).toBeTrue();
     expect(entries[0].textContent).toContain('closure');
     expect(entries[3].getAttribute('href')).toBe('/math/abstract-algebra/subgroups');
     expect(entries[4].getAttribute('href')).toBe('/math/abstract-algebra/generated-subgroups-and-cyclic-groups');
     expect(entries[5].getAttribute('href')).toBe('/math/abstract-algebra/cosets-and-partitions');
+    expect(entries[6].getAttribute('href')).toBe('/math/abstract-algebra/lagranges-theorem');
   });
 
-  it('lists Parts 1 through 6 correctly and links between the real rendered lessons', async () => {
+  it('lists Parts 1 through 7 correctly and links between the real rendered lessons', async () => {
     const harness = await RouterTestingHarness.create();
     await harness.navigateByUrl('/math/abstract-algebra', NotebookComponent);
     const secondUrl = '/math/abstract-algebra/associativity-identity-inverses';
-    expect(harness.routeNativeElement!.querySelectorAll('a.entry').length).toBe(6);
+    expect(harness.routeNativeElement!.querySelectorAll('a.entry').length).toBe(7);
     expect(harness.routeNativeElement!.textContent).toContain('Part 2');
     const first = await harness.navigateByUrl(lessonUrl, NotebookComponent);
     expect(first.nextLesson?.path).toBe(secondUrl);
@@ -177,11 +178,31 @@ describe('Implemented notebook reader and responsive navigation', () => {
     (hint.querySelector('summary') as HTMLElement).click();
     expect(hint.open).toBeTrue();
     expect(page.previousLesson?.part).toBe(5);
-    expect(page.nextLesson).toBeUndefined();
+    expect(page.nextLesson?.part).toBe(7);
     expect(root.querySelector('.reader-nav a[href="/math/abstract-algebra/generated-subgroups-and-cyclic-groups"]')).not.toBeNull();
   });
 
-  for (const [label, url] of [['Part 6', '/math/abstract-algebra/cosets-and-partitions'], ['the Algebra contents', '/math/abstract-algebra']]) {
+  it('renders the proof of Lagrange’s theorem and connects it to cosets and element order', async () => {
+    const harness = await RouterTestingHarness.create();
+    const page = await harness.navigateByUrl('/math/abstract-algebra/lagranges-theorem', NotebookComponent);
+    await page.loadNote(); harness.detectChanges();
+    const root = harness.routeNativeElement!;
+    expect(page.error).toBeFalse();
+    expect(root.querySelector('.breadcrumb')?.textContent).toContain('Part 7');
+    expect(root.querySelector('article h1')?.textContent).toContain('Lagrange');
+    expect(root.textContent).toContain('Proof: three facts about cosets');
+    expect(root.textContent).toContain('Every coset has exactly');
+    expect(root.textContent).toContain('order divides the group size');
+    expect(root.querySelectorAll('.ge-article math').length).toBeGreaterThan(0);
+    const hint = root.querySelector('details.math-hint') as HTMLDetailsElement;
+    (hint.querySelector('summary') as HTMLElement).click();
+    expect(hint.open).toBeTrue();
+    expect(page.previousLesson?.part).toBe(6);
+    expect(page.nextLesson).toBeUndefined();
+    expect(root.querySelector('.reader-nav a[href="/math/abstract-algebra/cosets-and-partitions"]')).not.toBeNull();
+  });
+
+  for (const [label, url] of [['Part 7', '/math/abstract-algebra/lagranges-theorem'], ['the Algebra contents', '/math/abstract-algebra']]) {
   it(`adapts ${label} to exact phone, tablet, and laptop widths without horizontal overflow`, async () => {
     const harness = await RouterTestingHarness.create();
     const page = await harness.navigateByUrl(url, NotebookComponent);

@@ -70,5 +70,17 @@
     "summary": "Use a subgroup to sort its parent group into cosets, starting with the general definition and then integer remainders.",
     "path": "/math/abstract-algebra/cosets-and-partitions",
     "source": "../docs/content/drafts/abstract-algebra/session-06.md"
+  },
+  {
+    "approved": true,
+    "part": 7,
+    "slug": "lagranges-theorem",
+    "title": "Lagrange’s theorem — counting with cosets",
+    "subject": "Mathematics",
+    "section": "Abstract Algebra",
+    "kind": "Learning session",
+    "summary": "Prove that a finite subgroup's size divides its group's size, then use the theorem to constrain element orders.",
+    "path": "/math/abstract-algebra/lagranges-theorem",
+    "source": "../docs/content/drafts/abstract-algebra/session-07.md"
   }
 ]
