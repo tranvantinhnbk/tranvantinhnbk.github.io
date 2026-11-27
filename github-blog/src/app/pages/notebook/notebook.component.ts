@@ -23,7 +23,33 @@ export class NotebookComponent implements AfterViewInit {
   error = false;
   articleHtml: SafeHtml | null = null;
   articleAfterHtml: SafeHtml | null = null;
+  articleTailHtml: SafeHtml | null = null;
   rotationExample = false;
+  homomorphismExample = false;
+  parityCosetsExample = false;
+  cosetN: number | null = 5;
+  readonly cosetSamples = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5];
+  get cosetParity() { return this.parity(this.cosetN ?? 0); }
+  get cosetDifference() { return (this.cosetN ?? 0) - this.cosetParity; }
+  setCosetInput(value: string) {
+    const parsed = /^-?(0|[1-9]\d*)$/.test(value) ? Number(value) : NaN;
+    this.cosetN = Number.isInteger(parsed) && parsed >= -5 && parsed <= 5 ? parsed : null;
+  }
+  homA: number | null = 3;
+  homB: number | null = 4;
+  get homValid() { return this.homA !== null && this.homB !== null; }
+  get homSum() { return (this.homA ?? 0) + (this.homB ?? 0); }
+  parity(value: number) { return ((value % 2) + 2) % 2; }
+  get homMappedA() { return this.parity(this.homA ?? 0); }
+  get homMappedB() { return this.parity(this.homB ?? 0); }
+  get homMappedProduct() { return this.parity(this.homSum); }
+  get homTargetProduct() { return this.parity(this.homMappedA + this.homMappedB); }
+  setHomInput(which: 'a' | 'b', value: string) {
+    const parsed = /^-?(0|[1-9]\d*)$/.test(value) ? Number(value) : NaN;
+    const next = Number.isSafeInteger(parsed) && parsed >= -20 && parsed <= 20 ? parsed : null;
+    if (which === 'a') this.homA = next;
+    else this.homB = next;
+  }
   rotationTurns = 0;
   rotationStep = 1;
   get rotationLabel() {
@@ -99,7 +125,13 @@ export class NotebookComponent implements AfterViewInit {
     this.abort?.abort();
     this.articleHtml = null;
     this.articleAfterHtml = null;
+    this.articleTailHtml = null;
     this.rotationExample = false;
+    this.homomorphismExample = false;
+    this.parityCosetsExample = false;
+    this.cosetN = 5;
+    this.homA = 3;
+    this.homB = 4;
     this.rotationTurns = 0;
     this.rotationStep = 1;
     this.code = null;
@@ -118,10 +150,21 @@ export class NotebookComponent implements AfterViewInit {
           // Only our manifest-selected, build-generated asset reaches this boundary.
           // The builder disables raw Markdown HTML and KaTeX trust. Preserve KaTeX's
           // required layout styles and MathML, which Angular's generic sanitizer strips.
-          const [before, after] = html.split('<!-- ge-interactive:square-rotations -->');
+          const marker = html.includes('<!-- ge-interactive:homomorphism -->')
+            ? '<!-- ge-interactive:homomorphism -->'
+            : '<!-- ge-interactive:square-rotations -->';
+          const [before, after] = html.split(marker);
           this.articleHtml = this.sanitizer.bypassSecurityTrustHtml(before);
-          this.rotationExample = after !== undefined;
-          this.articleAfterHtml = after === undefined ? null : this.sanitizer.bypassSecurityTrustHtml(after);
+          this.rotationExample = marker.includes('square-rotations') && after !== undefined;
+          this.homomorphismExample = marker.includes('homomorphism') && after !== undefined;
+          if (this.homomorphismExample && after !== undefined) {
+            const [middle, tail] = after.split('<!-- ge-interactive:parity-cosets -->');
+            this.articleAfterHtml = this.sanitizer.bypassSecurityTrustHtml(middle);
+            this.parityCosetsExample = tail !== undefined;
+            this.articleTailHtml = tail === undefined ? null : this.sanitizer.bypassSecurityTrustHtml(tail);
+          } else {
+            this.articleAfterHtml = after === undefined ? null : this.sanitizer.bypassSecurityTrustHtml(after);
+          }
         }
       } else {
         const { solution } = await import('../blog/leetcode/solution/content/solution');

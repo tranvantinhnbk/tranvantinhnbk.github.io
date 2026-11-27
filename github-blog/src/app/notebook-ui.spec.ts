@@ -46,20 +46,21 @@ describe('Implemented notebook reader and responsive navigation', () => {
     const overview = harness.routeNativeElement!;
     expect(overview.querySelector('#algebra-contents')?.textContent).toBe('Contents');
     const entries = Array.from(overview.querySelectorAll('.course-contents a'));
-    expect(entries.length).toBe(7);
+    expect(entries.length).toBe(8);
     expect(entries.every(entry => entry.textContent!.includes('TL;DR:'))).toBeTrue();
     expect(entries[0].textContent).toContain('closure');
     expect(entries[3].getAttribute('href')).toBe('/math/abstract-algebra/subgroups');
     expect(entries[4].getAttribute('href')).toBe('/math/abstract-algebra/generated-subgroups-and-cyclic-groups');
     expect(entries[5].getAttribute('href')).toBe('/math/abstract-algebra/cosets-and-partitions');
     expect(entries[6].getAttribute('href')).toBe('/math/abstract-algebra/lagranges-theorem');
+    expect(entries[7].getAttribute('href')).toBe('/math/abstract-algebra/homomorphisms');
   });
 
-  it('lists Parts 1 through 7 correctly and links between the real rendered lessons', async () => {
+  it('lists Parts 1 through 8 correctly and links between the real rendered lessons', async () => {
     const harness = await RouterTestingHarness.create();
     await harness.navigateByUrl('/math/abstract-algebra', NotebookComponent);
     const secondUrl = '/math/abstract-algebra/associativity-identity-inverses';
-    expect(harness.routeNativeElement!.querySelectorAll('a.entry').length).toBe(7);
+    expect(harness.routeNativeElement!.querySelectorAll('a.entry').length).toBe(8);
     expect(harness.routeNativeElement!.textContent).toContain('Part 2');
     const first = await harness.navigateByUrl(lessonUrl, NotebookComponent);
     expect(first.nextLesson?.path).toBe(secondUrl);
@@ -198,11 +199,84 @@ describe('Implemented notebook reader and responsive navigation', () => {
     (hint.querySelector('summary') as HTMLElement).click();
     expect(hint.open).toBeTrue();
     expect(page.previousLesson?.part).toBe(6);
-    expect(page.nextLesson).toBeUndefined();
+    expect(page.nextLesson?.path).toBe('/math/abstract-algebra/homomorphisms');
     expect(root.querySelector('.reader-nav a[href="/math/abstract-algebra/cosets-and-partitions"]')).not.toBeNull();
   });
 
-  for (const [label, url] of [['Part 7', '/math/abstract-algebra/lagranges-theorem'], ['the Algebra contents', '/math/abstract-algebra']]) {
+  it('renders Part 8 with its paired mappings and proof after the diagram', async () => {
+    const harness = await RouterTestingHarness.create();
+    const page = await harness.navigateByUrl('/math/abstract-algebra/homomorphisms', NotebookComponent);
+    await page.loadNote();
+    harness.detectChanges();
+    const root = harness.routeNativeElement!;
+    expect(page.error).toBeFalse();
+    expect(root.querySelector('article h1')?.textContent).toContain('Homomorphisms');
+    expect(root.textContent).toContain('Why parity always preserves addition');
+    expect(root.textContent).toContain('Keep the two kinds of object distinct');
+    expect(root.textContent).toContain('coset version');
+    expect(root.querySelectorAll('.ge-article').length).toBe(3);
+    expect(root.querySelector('.reader-nav a[href="/math/abstract-algebra/lagranges-theorem"]')).not.toBeNull();
+    const example = root.querySelector('.hom-example')!;
+    expect(example.querySelectorAll('.hom-set').length).toBe(2);
+    expect(example.querySelectorAll('.hom-arrows span').length).toBe(3);
+    expect(example.querySelector('.hom-equation')?.textContent).toContain('Equal: yes');
+    const input = example.querySelector('#hom-a') as HTMLInputElement;
+    input.value = '-3'; input.dispatchEvent(new Event('input')); harness.detectChanges();
+    expect(example.querySelector('.hom-equation')?.textContent).toContain('f(a ∗ b) = 1');
+    input.value = '1.5'; input.dispatchEvent(new Event('input')); harness.detectChanges();
+    expect(example.querySelector('[role=alert]')?.textContent).toContain('whole integers');
+    expect(example.querySelector('.hom-sets')).toBeNull();
+    input.value = '3'; input.dispatchEvent(new Event('input')); harness.detectChanges();
+    const cosets = root.querySelector('.coset-example')!;
+    expect(cosets.textContent).toContain('Kernel = 0 + 2ℤ');
+    expect(cosets.nextElementSibling?.textContent).toContain('Keep the two kinds of object distinct');
+    const integer = cosets.querySelector('#coset-n') as HTMLInputElement;
+    const minusThree = Array.from(cosets.querySelectorAll('.coset-numbers button')).find(button => button.textContent?.trim() === '-3') as HTMLButtonElement;
+    minusThree.click(); harness.detectChanges();
+    expect(integer.value).toBe('-3');
+    expect(cosets.querySelector('.coset-status')?.textContent).toContain('− 1 = -4 is even');
+    expect(cosets.querySelector('.coset-bucket.odd.selected')).not.toBeNull();
+    integer.value = '-4'; integer.dispatchEvent(new Event('change')); harness.detectChanges();
+    expect(cosets.querySelector('.coset-status')?.textContent).toContain('f(-4) = 0');
+    expect(cosets.querySelector('.coset-bucket.even.selected')).not.toBeNull();
+    integer.value = '2.5'; integer.dispatchEvent(new Event('change')); harness.detectChanges();
+    expect(cosets.querySelector('[role=alert]')?.textContent).toContain('whole integer');
+    integer.value = '5'; integer.dispatchEvent(new Event('change')); harness.detectChanges();
+    const originalParent = root.parentNode!;
+    for (const width of [390, 768, 1366]) {
+      const frame = document.createElement('iframe');
+      frame.width = String(width);
+      frame.height = '900';
+      frame.srcdoc = '<!doctype html><html><head></head><body></body></html>';
+      const loaded = new Promise<void>(resolve => frame.addEventListener('load', () => resolve(), { once: true }));
+      document.body.appendChild(frame);
+      await loaded;
+      try {
+        const doc = frame.contentDocument!;
+        for (const style of Array.from(document.querySelectorAll('style, link[rel=stylesheet]'))) doc.head.appendChild(style.cloneNode(true));
+        doc.body.appendChild(root);
+        await doc.fonts.ready;
+        await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+        expect(doc.documentElement.scrollWidth).withContext(`homomorphism overflow at ${width}px`).toBeLessThanOrEqual(width + 1);
+        const source = example.querySelectorAll('.hom-set:first-child .hom-element');
+        const target = example.querySelectorAll('.hom-target .hom-element');
+        for (let i = 0; i < 3; i++) {
+          const sourceY = source[i].getBoundingClientRect().top + source[i].getBoundingClientRect().height / 2;
+          const targetY = target[i].getBoundingClientRect().top + target[i].getBoundingClientRect().height / 2;
+          expect(Math.abs(sourceY - targetY)).withContext(`row ${i + 1} pairing at ${width}px`).toBeLessThan(12);
+        }
+      } finally {
+        originalParent.appendChild(root);
+        frame.remove();
+      }
+    }
+    await harness.navigateByUrl('/math/abstract-algebra/lagranges-theorem', NotebookComponent);
+    await page.loadNote(); harness.detectChanges();
+    expect(harness.routeNativeElement!.querySelector('.hom-example')).toBeNull();
+    expect(harness.routeNativeElement!.querySelector('.coset-example')).toBeNull();
+  });
+
+  for (const [label, url] of [['Part 8', '/math/abstract-algebra/homomorphisms'], ['the Algebra contents', '/math/abstract-algebra']]) {
   it(`adapts ${label} to exact phone, tablet, and laptop widths without horizontal overflow`, async () => {
     const harness = await RouterTestingHarness.create();
     const page = await harness.navigateByUrl(url, NotebookComponent);

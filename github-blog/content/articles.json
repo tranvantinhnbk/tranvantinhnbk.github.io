@@ -82,5 +82,17 @@
     "summary": "Prove that a finite subgroup's size divides its group's size, then use the theorem to constrain element orders.",
     "path": "/math/abstract-algebra/lagranges-theorem",
     "source": "../docs/content/drafts/abstract-algebra/session-07.md"
+  },
+  {
+    "approved": true,
+    "part": 8,
+    "slug": "homomorphisms",
+    "title": "Homomorphisms — preserving an operation",
+    "subject": "Mathematics",
+    "section": "Abstract Algebra",
+    "kind": "Learning session",
+    "summary": "Map one group into another and check whether combining before or after the map gives the same result.",
+    "path": "/math/abstract-algebra/homomorphisms",
+    "source": "../docs/content/drafts/abstract-algebra/session-08.md"
   }
 ]

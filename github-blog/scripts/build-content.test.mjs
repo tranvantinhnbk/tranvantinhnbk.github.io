@@ -11,8 +11,22 @@ test('renders a safe rotation slot between balanced article sections and rejects
   assert.match(html, /<\/div><!-- ge-interactive:square-rotations --><div class="ge-article">/);
   assert.match(html, /After/);
   assert.doesNotMatch(html, /<script|<button/);
-  assert.throws(() => renderArticle(slot + '\n' + slot), /Only one/);
+  assert.throws(() => renderArticle(slot + '\n' + slot), /Only the homomorphism/);
   assert.throws(() => renderArticle('```interactive:square-rotations\nanything\n```'), /empty top-level/);
+});
+
+test('renders the reviewed homomorphism slot and rejects slot content', async () => {
+  const source = await readFile(new URL('../../docs/content/drafts/abstract-algebra/session-08.md', import.meta.url), 'utf8');
+  const html = renderArticle(source);
+  assert.match(html, /<!-- ge-interactive:homomorphism -->/);
+  assert.match(html, /<!-- ge-interactive:parity-cosets -->/);
+  assert.ok(html.indexOf('ge-interactive:homomorphism') < html.indexOf('ge-interactive:parity-cosets'));
+  assert.match(html, /Why parity always preserves addition/);
+  assert.match(html, /<math/);
+  assert.throws(() => renderArticle('```interactive:homomorphism\n<script>bad</script>\n```'), /empty top-level/);
+  assert.throws(() => renderArticle('```interactive:homomorphism\n```\n\n```interactive:parity-cosets\nnot empty\n```'), /empty top-level/);
+  assert.throws(() => renderArticle('```interactive:parity-cosets\n```'), /Only the homomorphism/);
+  assert.throws(() => renderArticle('```interactive:homomorphism\n```\n\n```interactive:square-rotations\n```'), /Only the homomorphism/);
 });
 
 test('typesets inline fractions and aligned proofs, omitting the duplicate article title', () => {

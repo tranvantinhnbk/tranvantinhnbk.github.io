@@ -49,12 +49,27 @@
         <section><h2>About the author</h2><p>My profile, CV, achievements, and earlier projects.</p><a routerLink="/profile">Visit my profile ↗</a></section>
       </ng-container>
       <ng-container *ngSwitchCase="'math'"><p class="eyebrow">Subject / Mathematics</p><h1>Math.</h1><p class="intro">Ideas, definitions, and reasoning, one concrete example at a time.</p><a class="entry" routerLink="/math/abstract-algebra"><small>Section</small><h2>Abstract Algebra ↗</h2><p>Begin with sets, operations, and closure.</p></a></ng-container>
-      <ng-container *ngSwitchCase="'algebra'"><p class="eyebrow">Math / Learning together</p><h1>Abstract Algebra.</h1><p class="intro">Sets, operations, and the structures they create. Build understanding through examples, proofs, and questions.</p><section aria-labelledby="algebra-contents"><h2 id="algebra-contents">Contents</h2><p>Read in order, or choose the concept you want to revisit.</p><ol class="course-contents"><li *ngFor="let note of mathNotes"><a class="entry" [routerLink]="note.path"><small><ng-container *ngIf="note.part">Part {{ note.part }} / </ng-container>{{ note.kind }}</small><h3>{{ note.title }} ↗</h3><p><strong>TL;DR:</strong> {{ note.summary }}</p></a></li></ol></section><section><h2>Where we’re going</h2><p>These topics are planned for later sessions:</p><ul class="planned"><li>Homomorphisms and quotients</li><li>Rings, ideals, and polynomials</li><li>Fields, extensions, and Galois theory</li></ul></section></ng-container>
+      <ng-container *ngSwitchCase="'algebra'"><p class="eyebrow">Math / Learning together</p><h1>Abstract Algebra.</h1><p class="intro">Sets, operations, and the structures they create. Build understanding through examples, proofs, and questions.</p><section aria-labelledby="algebra-contents"><h2 id="algebra-contents">Contents</h2><p>Read in order, or choose the concept you want to revisit.</p><ol class="course-contents"><li *ngFor="let note of mathNotes"><a class="entry" [routerLink]="note.path"><small><ng-container *ngIf="note.part">Part {{ note.part }} / </ng-container>{{ note.kind }}</small><h3>{{ note.title }} ↗</h3><p><strong>TL;DR:</strong> {{ note.summary }}</p></a></li></ol></section><section><h2>Where we’re going</h2><p>These topics are planned for later sessions:</p><ul class="planned"><li>Quotient groups</li><li>Rings, ideals, and polynomials</li><li>Fields, extensions, and Galois theory</li></ul></section></ng-container>
       <ng-container *ngSwitchDefault>
         <article *ngIf="currentNote as note; else missing" [class.math-reader]="note.source === 'article'" [attr.aria-busy]="loading">
           <p class="eyebrow">{{ note.subject }}<ng-container *ngIf="note.section"> / {{ note.section }}</ng-container><ng-container *ngIf="note.part"> / Part {{ note.part }}</ng-container> / {{ note.kind }}</p><h1>{{ note.title }}</h1>
           <p *ngIf="loading" role="status">Loading note…</p><div *ngIf="error" role="alert"><p>This note could not load.</p><button (click)="loadNote()">Try again</button></div>
           <div *ngIf="articleHtml" [innerHTML]="articleHtml"></div>
+          <section *ngIf="homomorphismExample" class="hom-example" aria-labelledby="hom-heading">
+            <p class="eyebrow">Explore the map</p><h2 id="hom-heading">Do both routes reach the same result?</h2>
+            <p>Choose two integers. Here ∗ means ordinary addition in the source group and addition modulo 2 in the target group.</p>
+            <div class="hom-controls"><label for="hom-a">a<input id="hom-a" type="number" min="-20" max="20" step="1" value="3" (input)="setHomInput('a', $any($event.target).value)"></label><label for="hom-b">b<input id="hom-b" type="number" min="-20" max="20" step="1" value="4" (input)="setHomInput('b', $any($event.target).value)"></label></div>
+            <p *ngIf="!homValid" class="hom-error" role="alert">Enter whole integers from −20 to 20 in both fields.</p>
+            <ng-container *ngIf="homValid">
+              <div class="hom-sets">
+                <div class="hom-set"><h3>Source group <small>G = (ℤ, +)</small></h3><div class="hom-elements"><div class="hom-element"><small>a</small><strong>{{ homA }}</strong></div><div class="hom-element"><small>b</small><strong>{{ homB }}</strong></div><div class="hom-element hom-result"><small>a ∗ b</small><strong>{{ homSum }}</strong></div></div></div>
+                <div class="hom-arrows" aria-label="Each row shows one mapping"><span>f →</span><span>f →</span><span>f →</span></div>
+                <div class="hom-set hom-target"><h3>Target group <small>K = (&#123;0, 1&#125;, + mod 2)</small></h3><div class="hom-elements"><div class="hom-element"><small>f(a)</small><strong>{{ homMappedA }}</strong></div><div class="hom-element"><small>f(b)</small><strong>{{ homMappedB }}</strong></div><div class="hom-element hom-result"><small>f(a) ∗ f(b)</small><strong>{{ homTargetProduct }}</strong></div></div></div>
+              </div>
+              <p class="hom-equation" role="status" aria-live="polite">f(a ∗ b) = {{ homMappedProduct }} and f(a) ∗ f(b) = {{ homTargetProduct }}. Equal: {{ homMappedProduct === homTargetProduct ? 'yes' : 'no' }}.</p>
+              <p>In G: {{ homA }} ∗ {{ homB }} = {{ homSum }}. The map sends that result to {{ homMappedProduct }}; combining the mapped inputs in K also gives {{ homTargetProduct }}.</p>
+            </ng-container>
+          </section>
           <section *ngIf="rotationExample && note.part === 5" class="rotation-example" aria-labelledby="generator-heading">
             <p class="eyebrow">Explore the generated subgroup</p><h2 id="generator-heading">Choose your generator</h2>
             <p>Repeat one rotation. The marked corner shows its orientation.</p>
@@ -74,6 +89,20 @@
             <p>Four quarter-turns return to the identity.</p>
           </section>
           <div *ngIf="articleAfterHtml" [innerHTML]="articleAfterHtml"></div>
+          <section *ngIf="parityCosetsExample" class="coset-example" aria-labelledby="coset-heading">
+            <p class="eyebrow">Explore the kernel and cosets</p><h2 id="coset-heading">Where does each integer land?</h2>
+            <p>Choose an integer. Even inputs map to the target identity 0; odd inputs map to 1.</p>
+            <label for="coset-n">Integer n</label><input id="coset-n" type="number" min="-5" max="5" step="1" [value]="cosetN ?? ''" (change)="setCosetInput($any($event.target).value)">
+            <div class="coset-numbers" aria-label="Choose an integer from negative five to five"><button *ngFor="let value of cosetSamples" type="button" (click)="cosetN = value" [attr.aria-pressed]="cosetN === value" [class.even]="parity(value) === 0" [class.odd]="parity(value) === 1" [class.selected]="cosetN === value">{{ value }}</button></div>
+            <p class="coset-arrow" aria-hidden="true">↓ mapped by f(n) = n mod 2</p>
+            <div class="coset-buckets">
+              <div class="coset-bucket even" [class.selected]="cosetN !== null && cosetParity === 0"><h3>f(n) = 0 <small>one target element</small></h3><strong>Kernel = 0 + 2ℤ = 2ℤ</strong><p>…, −4, −2, 0, 2, 4, …</p></div>
+              <div class="coset-bucket odd" [class.selected]="cosetN !== null && cosetParity === 1"><h3>f(n) = 1 <small>one target element</small></h3><strong>Odd coset = 1 + 2ℤ</strong><p>…, −3, −1, 1, 3, 5, …</p></div>
+            </div>
+            <p *ngIf="cosetN === null" role="alert" class="hom-error">Choose a whole integer from −5 to 5.</p>
+            <p *ngIf="cosetN !== null" class="coset-status" role="status" aria-live="polite">f({{ cosetN }}) = {{ cosetParity }} is one target element. {{ cosetN }} + 2ℤ = {{ cosetParity }} + 2ℤ is a set of {{ cosetParity === 0 ? 'even' : 'odd' }} integers. Difference test: {{ cosetN }} − {{ cosetParity }} = {{ cosetDifference }} is even.</p>
+          </section>
+          <div *ngIf="articleTailHtml" [innerHTML]="articleTailHtml"></div>
           <ng-container *ngIf="note.source === 'coding'"><p>From the existing coding collection. Code is preserved as written; correctness has not been revalidated during this UI update.</p><ng-container *ngIf="code"><section *ngIf="code.python"><h2>Python</h2><pre tabindex="0" aria-label="Python code"><code>{{ code.python }}</code></pre></section><section *ngIf="code.typescript"><h2>TypeScript</h2><pre tabindex="0" aria-label="TypeScript code"><code>{{ code.typescript }}</code></pre></section></ng-container></ng-container>
           <nav *ngIf="note.source === 'article'" class="reader-nav" aria-label="Lesson navigation"><a *ngIf="previousLesson as previous" [routerLink]="previous.path">← Part {{ previous.part }}: {{ previous.title }}</a><a *ngIf="nextLesson as next" [routerLink]="next.path">Part {{ next.part }}: {{ next.title }} →</a><a routerLink="/math/abstract-algebra">All Abstract Algebra lessons</a></nav>
         </article>
