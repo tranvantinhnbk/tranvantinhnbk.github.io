@@ -94,5 +94,17 @@
     "summary": "Map one group into another and check whether combining before or after the map gives the same result.",
     "path": "/math/abstract-algebra/homomorphisms",
     "source": "../docs/content/drafts/abstract-algebra/session-08.md"
+  },
+  {
+    "approved": true,
+    "part": 9,
+    "slug": "quotient-groups",
+    "title": "Quotient groups — making cosets into elements",
+    "subject": "Mathematics",
+    "section": "Abstract Algebra",
+    "kind": "Learning session",
+    "summary": "Treat each coset as one element and combine cosets independently of their representatives.",
+    "path": "/math/abstract-algebra/quotient-groups",
+    "source": "../docs/content/drafts/abstract-algebra/session-09.md"
   }
 ]

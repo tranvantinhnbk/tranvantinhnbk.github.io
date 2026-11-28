@@ -5,6 +5,15 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { renderArticle, buildContent } from './build-content.mjs';
 
+test('renders the quotient lesson around a fixed slot and rejects slot content', async () => {
+  const source = await readFile(new URL('../../docs/content/drafts/abstract-algebra/session-09.md', import.meta.url), 'utf8');
+  const html = renderArticle(source);
+  assert.match(html, /ge-interactive:quotient-cosets/);
+  assert.match(html, /Three cosets/);
+  assert.match(html, /<math/);
+  assert.throws(() => renderArticle('```interactive:quotient-cosets\ncontent\n```'), /empty top-level/);
+});
+
 test('renders a safe rotation slot between balanced article sections and rejects malformed slots', () => {
   const slot = '```interactive:square-rotations\n```\n';
   const html = renderArticle('Before\n\n' + slot + '\nAfter');

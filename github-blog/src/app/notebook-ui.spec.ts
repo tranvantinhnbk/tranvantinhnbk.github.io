@@ -9,6 +9,30 @@ const lessonUrl = '/math/abstract-algebra/sets-operations-closure';
 describe('Implemented notebook reader and responsive navigation', () => {
   beforeEach(() => TestBed.configureTestingModule({ providers: [provideRouter(APP_ROUTES)] }));
 
+  it('loads Part 9 and keeps the quotient result when representatives change', async () => {
+    const harness = await RouterTestingHarness.create();
+    const page = await harness.navigateByUrl('/math/abstract-algebra/quotient-groups', NotebookComponent);
+    await page.loadNote(); harness.detectChanges();
+    const root = harness.routeNativeElement!;
+    expect(page.error).toBeFalse();
+    expect(root.textContent).toContain('Three cosets: what does 0, 1, 2 mean?');
+    expect(root.textContent).toContain('What changes for a general group?');
+    expect(page.previousLesson?.part).toBe(8);
+    const demo = root.querySelector('app-quotient-example')!;
+    expect(demo.textContent).toContain('O + O = E');
+    const change = Array.from(demo.querySelectorAll('button')).find(button => button.textContent?.includes('Change both'))!;
+    change.click(); harness.detectChanges();
+    expect(demo.textContent).toContain('8 + H = E');
+    expect(demo.textContent).toContain('result coset is unchanged');
+    const input = demo.querySelector('input') as HTMLInputElement;
+    input.value = '1.5'; input.dispatchEvent(new Event('change')); harness.detectChanges();
+    expect(demo.querySelector('[role=alert]')).not.toBeNull();
+    await harness.navigateByUrl('/math/abstract-algebra/homomorphisms', NotebookComponent);
+    await page.loadNote(); harness.detectChanges();
+    expect(harness.routeNativeElement!.querySelector('app-quotient-example')).toBeNull();
+    expect(page.nextLesson?.part).toBe(9);
+  });
+
   it('renders the real generated article with fractions, aligned proof, and a native hint', async () => {
     const harness = await RouterTestingHarness.create();
     const page = await harness.navigateByUrl(lessonUrl, NotebookComponent);
@@ -46,7 +70,7 @@ describe('Implemented notebook reader and responsive navigation', () => {
     const overview = harness.routeNativeElement!;
     expect(overview.querySelector('#algebra-contents')?.textContent).toBe('Contents');
     const entries = Array.from(overview.querySelectorAll('.course-contents a'));
-    expect(entries.length).toBe(8);
+    expect(entries.length).toBe(9);
     expect(entries.every(entry => entry.textContent!.includes('TL;DR:'))).toBeTrue();
     expect(entries[0].textContent).toContain('closure');
     expect(entries[3].getAttribute('href')).toBe('/math/abstract-algebra/subgroups');
@@ -56,11 +80,11 @@ describe('Implemented notebook reader and responsive navigation', () => {
     expect(entries[7].getAttribute('href')).toBe('/math/abstract-algebra/homomorphisms');
   });
 
-  it('lists Parts 1 through 8 correctly and links between the real rendered lessons', async () => {
+  it('lists Parts 1 through 9 correctly and links between the real rendered lessons', async () => {
     const harness = await RouterTestingHarness.create();
     await harness.navigateByUrl('/math/abstract-algebra', NotebookComponent);
     const secondUrl = '/math/abstract-algebra/associativity-identity-inverses';
-    expect(harness.routeNativeElement!.querySelectorAll('a.entry').length).toBe(8);
+    expect(harness.routeNativeElement!.querySelectorAll('a.entry').length).toBe(9);
     expect(harness.routeNativeElement!.textContent).toContain('Part 2');
     const first = await harness.navigateByUrl(lessonUrl, NotebookComponent);
     expect(first.nextLesson?.path).toBe(secondUrl);
@@ -276,7 +300,7 @@ describe('Implemented notebook reader and responsive navigation', () => {
     expect(harness.routeNativeElement!.querySelector('.coset-example')).toBeNull();
   });
 
-  for (const [label, url] of [['Part 8', '/math/abstract-algebra/homomorphisms'], ['the Algebra contents', '/math/abstract-algebra']]) {
+  for (const [label, url] of [['Part 9', '/math/abstract-algebra/quotient-groups'], ['the Algebra contents', '/math/abstract-algebra']]) {
   it(`adapts ${label} to exact phone, tablet, and laptop widths without horizontal overflow`, async () => {
     const harness = await RouterTestingHarness.create();
     const page = await harness.navigateByUrl(url, NotebookComponent);

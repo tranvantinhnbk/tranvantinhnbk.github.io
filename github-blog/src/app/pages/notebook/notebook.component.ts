@@ -3,11 +3,12 @@ import { AfterViewInit, Component, DestroyRef, ElementRef, ViewChild, inject } f
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { QuotientExampleComponent } from './quotient-example.component';
 import { notes, browseNotes } from './note-index';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, QuotientExampleComponent],
   templateUrl: './notebook.component.html',
   styleUrls: ['./notebook.component.scss'],
 })
@@ -24,6 +25,7 @@ export class NotebookComponent implements AfterViewInit {
   articleHtml: SafeHtml | null = null;
   articleAfterHtml: SafeHtml | null = null;
   articleTailHtml: SafeHtml | null = null;
+  quotientExample = false;
   rotationExample = false;
   homomorphismExample = false;
   parityCosetsExample = false;
@@ -126,6 +128,7 @@ export class NotebookComponent implements AfterViewInit {
     this.articleHtml = null;
     this.articleAfterHtml = null;
     this.articleTailHtml = null;
+    this.quotientExample = false;
     this.rotationExample = false;
     this.homomorphismExample = false;
     this.parityCosetsExample = false;
@@ -150,10 +153,11 @@ export class NotebookComponent implements AfterViewInit {
           // Only our manifest-selected, build-generated asset reaches this boundary.
           // The builder disables raw Markdown HTML and KaTeX trust. Preserve KaTeX's
           // required layout styles and MathML, which Angular's generic sanitizer strips.
-          const marker = html.includes('<!-- ge-interactive:homomorphism -->')
+          const marker = html.includes('<!-- ge-interactive:quotient-cosets -->') ? '<!-- ge-interactive:quotient-cosets -->' : html.includes('<!-- ge-interactive:homomorphism -->')
             ? '<!-- ge-interactive:homomorphism -->'
             : '<!-- ge-interactive:square-rotations -->';
           const [before, after] = html.split(marker);
+          this.quotientExample = marker.includes('quotient-cosets') && after !== undefined;
           this.articleHtml = this.sanitizer.bypassSecurityTrustHtml(before);
           this.rotationExample = marker.includes('square-rotations') && after !== undefined;
           this.homomorphismExample = marker.includes('homomorphism') && after !== undefined;

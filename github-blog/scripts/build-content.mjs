@@ -9,7 +9,7 @@ export function createRenderer() {
   const codeFence = md.renderer.rules.fence;
   md.renderer.rules.fence = (tokens, i, options, env, self) => {
     const kind = tokens[i].info.trim();
-    if (!['interactive:square-rotations', 'interactive:homomorphism', 'interactive:parity-cosets'].includes(kind)) return codeFence(tokens, i, options, env, self);
+    if (!['interactive:square-rotations', 'interactive:homomorphism', 'interactive:parity-cosets', 'interactive:quotient-cosets'].includes(kind)) return codeFence(tokens, i, options, env, self);
     if (tokens[i].level !== 0 || tokens[i].content.trim()) throw new Error('Interactive example must be an empty top-level fence');
     return `</div><!-- ge-${kind} --><div class="ge-article">`;
   };
@@ -58,7 +58,7 @@ export function renderArticle(source) {
   const body = source.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, '');
   const md = createRenderer();
   const tokens = md.parse(body, {});
-  const slots = tokens.filter(token => token.type === 'fence' && ['interactive:square-rotations', 'interactive:homomorphism', 'interactive:parity-cosets'].includes(token.info.trim())).map(token => token.info.trim());
+  const slots = tokens.filter(token => token.type === 'fence' && ['interactive:square-rotations', 'interactive:homomorphism', 'interactive:parity-cosets', 'interactive:quotient-cosets'].includes(token.info.trim())).map(token => token.info.trim());
   const pairedParitySlots = slots.length === 2 && slots[0] === 'interactive:homomorphism' && slots[1] === 'interactive:parity-cosets';
   if ((slots.length > 1 && !pairedParitySlots) || (slots.includes('interactive:parity-cosets') && !pairedParitySlots)) throw new Error('Only the homomorphism and parity-cosets pair is supported together');
   // The application renders the approved metadata title, so omit the duplicate Markdown h1.
